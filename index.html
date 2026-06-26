@@ -1232,6 +1232,109 @@ h1, h2, h3, h4, h5 { font-family: 'Poppins', sans-serif; font-weight: 700; }
   height: 48px;
   border-radius: var(--r-avatar);
 }
+
+/* ROLE BADGES */
+.role-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+.role-member    { background: rgba(139,204,193,0.2); color: var(--secondary); }
+.role-moderator { background: rgba(229,168,85,0.2);  color: var(--accent); }
+.role-operator  { background: rgba(90,156,122,0.2);  color: var(--primary-dark); }
+.role-admin     { background: rgba(90,156,122,0.2);  color: var(--primary-dark); }
+
+/* ACCOUNTS TABLE */
+.accounts-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.accounts-table th {
+  text-align: left;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 12px 16px;
+  border-bottom: 2px solid var(--border);
+}
+.accounts-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
+  color: var(--text);
+  vertical-align: middle;
+}
+.accounts-table tr:last-child td { border-bottom: none; }
+.accounts-table tr:hover td { background: rgba(90,156,122,0.03); }
+
+.role-select {
+  padding: 6px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  background: var(--bg-tertiary);
+  color: var(--text);
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  transition: all 0.2s;
+}
+.role-select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(90, 156, 122, 0.1);
+}
+
+/* NEWS / PROJECT CARDS */
+.news-card, .project-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--r-card);
+  padding: 24px;
+  margin-bottom: 16px;
+  transition: all 0.3s;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+}
+.news-card:hover, .project-card:hover {
+  border-color: var(--primary-light);
+  box-shadow: var(--shadow);
+}
+.news-card-title, .project-card-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+.news-card-body, .project-card-body {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 14px;
+}
+.news-card-meta, .project-card-meta {
+  font-size: 12px;
+  color: var(--text-tertiary);
+}
+.news-card-header, .project-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+/* SECTION HEADER ROW */
+.section-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
 </style>
 </head>
 <body>
@@ -1249,6 +1352,8 @@ h1, h2, h3, h4, h5 { font-family: 'Poppins', sans-serif; font-weight: 700; }
     <div class="nav-links">
       <button class="nav-link active" onclick="showPage('home')">Home</button>
       <button class="nav-link" onclick="showPage('feed')">Ideas</button>
+      <button class="nav-link" onclick="showPage('news')">News</button>
+      <button class="nav-link" onclick="showPage('projects')">Projects</button>
       <button class="nav-link" onclick="showPage('leaderboard')">Innovators</button>
       <button class="nav-link" id="nav-admin-link" style="display:none" onclick="showPage('admin')">Admin</button>
     </div>
@@ -1356,6 +1461,73 @@ h1, h2, h3, h4, h5 { font-family: 'Poppins', sans-serif; font-weight: 700; }
   </div>
 </div>
 
+<!-- ADD NEWS MODAL -->
+<div class="modal-overlay" id="add-news-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('add-news-modal')">✕</button>
+    <div class="modal-title">Post News</div>
+    <div class="modal-sub">Publish a news post to the platform.</div>
+    <div class="form-group">
+      <label class="form-label">Title *</label>
+      <input type="text" class="form-input" id="news-title" placeholder="News headline" maxlength="120">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Category *</label>
+      <select class="form-select" id="news-category">
+        <option value="">Select a category</option>
+        <option>Announcement</option>
+        <option>Event</option>
+        <option>Achievement</option>
+        <option>Update</option>
+        <option>Other</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Content *</label>
+      <textarea class="form-textarea" id="news-body" placeholder="Write the news content..." maxlength="2000"></textarea>
+    </div>
+    <div id="news-submit-msg"></div>
+    <button class="form-submit" id="news-submit-btn" onclick="submitNews()">Publish →</button>
+  </div>
+</div>
+
+<!-- ADD PROJECT MODAL -->
+<div class="modal-overlay" id="add-project-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('add-project-modal')">✕</button>
+    <div class="modal-title">Add Project</div>
+    <div class="modal-sub">Add an official project to the platform.</div>
+    <div class="form-group">
+      <label class="form-label">Project Name *</label>
+      <input type="text" class="form-input" id="project-name" placeholder="Project name" maxlength="100">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Category *</label>
+      <select class="form-select" id="project-category">
+        <option value="">Select a category</option>
+        <option>EdTech</option>
+        <option>Environment</option>
+        <option>Health</option>
+        <option>Mobility</option>
+        <option>AI/ML</option>
+        <option>Community</option>
+        <option>Clean Energy</option>
+        <option>Other</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Description *</label>
+      <textarea class="form-textarea" id="project-desc" placeholder="Describe this project..." maxlength="1000"></textarea>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Team / Author</label>
+      <input type="text" class="form-input" id="project-team" placeholder="Team or author name" maxlength="100">
+    </div>
+    <div id="project-submit-msg"></div>
+    <button class="form-submit" id="project-submit-btn" onclick="submitProject()">Create Project →</button>
+  </div>
+</div>
+
 <!-- HOME PAGE -->
 <div id="page-home" class="page active z1">
   <div class="hero">
@@ -1452,6 +1624,38 @@ h1, h2, h3, h4, h5 { font-family: 'Poppins', sans-serif; font-weight: 700; }
   </div>
 </div>
 
+<!-- NEWS PAGE -->
+<div id="page-news" class="page z1">
+  <div class="container">
+    <div class="section">
+      <div class="section-header-row">
+        <div>
+          <h2 class="section-title">Latest News</h2>
+          <p class="section-sub">Stay up to date with INNORA announcements and events.</p>
+        </div>
+        <button class="btn btn-primary" id="nav-add-news-btn" style="display:none" onclick="openModal('add-news-modal')">+ Post News</button>
+      </div>
+      <div id="news-feed"></div>
+    </div>
+  </div>
+</div>
+
+<!-- PROJECTS PAGE -->
+<div id="page-projects" class="page z1">
+  <div class="container">
+    <div class="section">
+      <div class="section-header-row">
+        <div>
+          <h2 class="section-title">Projects</h2>
+          <p class="section-sub">Official projects curated by the INNORA team.</p>
+        </div>
+        <button class="btn btn-primary" id="nav-add-project-btn" style="display:none" onclick="openModal('add-project-modal')">+ Add Project</button>
+      </div>
+      <div id="projects-feed"></div>
+    </div>
+  </div>
+</div>
+
 <!-- LOGIN PAGE -->
 <div id="page-login" class="page z1">
   <div class="login-container">
@@ -1527,6 +1731,9 @@ h1, h2, h3, h4, h5 { font-family: 'Poppins', sans-serif; font-weight: 700; }
       <div class="admin-nav-item" onclick="adminSection('reports')">🚨 Reports</div>
       <div class="admin-nav-item" onclick="adminSection('approve')">✅ Approve Ideas</div>
       <div class="admin-nav-item" onclick="adminSection('suggestions')">💬 Send Suggestions</div>
+      <div class="admin-nav-item" id="admin-nav-news" style="display:none" onclick="adminSection('news')">📰 News</div>
+      <div class="admin-nav-item" id="admin-nav-projects" style="display:none" onclick="adminSection('projects')">🚀 Projects</div>
+      <div class="admin-nav-item" id="admin-nav-accounts" style="display:none" onclick="adminSection('accounts')">👥 Accounts</div>
       <div style="height: 1px; background: var(--border); margin: 12px 0;"></div>
       <div class="admin-nav-item" onclick="signOut()" style="color: var(--danger);">↩ Sign Out</div>
     </div>
@@ -1574,6 +1781,49 @@ h1, h2, h3, h4, h5 { font-family: 'Poppins', sans-serif; font-weight: 700; }
         <p class="section-sub">Provide constructive feedback to idea creators.</p>
         <div id="pending-creators-list"></div>
       </div>
+
+      <!-- News Management -->
+      <div class="admin-section" id="admin-news-section">
+        <div class="section-header-row" style="margin-bottom: 8px;">
+          <div>
+            <h2 class="section-title">News Management</h2>
+            <p class="section-sub">Create and manage platform news posts.</p>
+          </div>
+          <button class="btn btn-primary" onclick="openModal('add-news-modal')">+ Post News</button>
+        </div>
+        <div id="admin-news-list"></div>
+      </div>
+
+      <!-- Projects Management -->
+      <div class="admin-section" id="admin-projects-section">
+        <div class="section-header-row" style="margin-bottom: 8px;">
+          <div>
+            <h2 class="section-title">Projects Management</h2>
+            <p class="section-sub">Add and manage official platform projects.</p>
+          </div>
+          <button class="btn btn-primary" onclick="openModal('add-project-modal')">+ Add Project</button>
+        </div>
+        <div id="admin-projects-list"></div>
+      </div>
+
+      <!-- Accounts Management -->
+      <div class="admin-section" id="admin-accounts-section">
+        <h2 class="section-title">User Accounts</h2>
+        <p class="section-sub">View all accounts and manage user roles.</p>
+        <div style="overflow-x: auto;">
+          <table class="accounts-table" id="accounts-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Change Role</th>
+              </tr>
+            </thead>
+            <tbody id="accounts-list"></tbody>
+          </table>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -1604,7 +1854,7 @@ let likedIdeas = new Set(JSON.parse(localStorage.getItem('innora_likes') || '[]'
 const mockIdeas = [
   { id: '1', title: 'Smart Water Management System', category: 'Environment', description: 'IoT sensors to monitor water usage and reduce waste in schools.', creator_id: 'mock-1', creator_name: 'Sarah', creator_bio: 'Environmental innovator', creator_pfp: null, status: 'approved', likes: 42, views: 128, created_at: new Date(Date.now() - 3600000).toISOString() },
   { id: '2', title: 'Mental Health Support App', category: 'Health', description: 'Peer-to-peer mental health support platform for students.', creator_id: 'mock-2', creator_name: 'Alex', creator_bio: 'Health tech enthusiast', creator_pfp: null, status: 'approved', likes: 35, views: 98, created_at: new Date(Date.now() - 7200000).toISOString() },
-  { id: '3', title: 'AI Tutoring Assistant', category: 'EdTech', description: 'Personalized AI tutor that adapts to student learning styles.', creator_id: 'mock-3', creator_name: 'Jordan', creator_bio: 'AI researcher', creator_pfp: null, status: 'pending', likes: 28, views: 76, created_at: new Date(Date.now() - 86400000).toISOString() }
+  { id: '3', title: 'AI Tutoring Assistant', category: 'EdTech', description: 'Personalized AI tutor that adapts to student learning styles.', creator_id: 'mock-3', creator_name: 'Jordan', creator_bio: 'AI researcher', creator_pfp: null, status: 'approved', likes: 28, views: 76, created_at: new Date(Date.now() - 86400000).toISOString() }
 ];
 
 // ─── INITIALIZATION ─────────────────────────────────────────
@@ -1628,13 +1878,16 @@ async function init() {
   updateNavAuth();
   loadIdeas();
   updateStats();
+  await loadNews();
+  await loadProjects();
+  await loadAccounts();
 }
 
 window.addEventListener('DOMContentLoaded', init);
 
 // ─── PAGE ROUTING ───────────────────────────────────────────
 function showPage(id) {
-  if (id === 'admin' && !isAdmin()) { showToast('Admin access denied', 'error'); return; }
+  if (id === 'admin' && !isAdmin()) { showToast('Access denied', 'error'); return; }
   
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
@@ -1652,6 +1905,8 @@ function showPage(id) {
   if (id === 'feed') renderFeed();
   if (id === 'leaderboard') renderLeaderboard();
   if (id === 'admin') loadAdminDashboard();
+  if (id === 'news') renderNewsFeed();
+  if (id === 'projects') renderProjectsFeed();
 }
 
 // ─── AUTH FUNCTIONS ─────────────────────────────────────────
@@ -1675,9 +1930,9 @@ async function signIn() {
 
   msg.innerHTML = '';
   
-  // ADMIN LOGIN BYPASS
+  // ADMIN LOGIN BYPASS (Generate fake valid UUID string format for custom admin dashboard profile tasks if matching local mock layout logic)
   if (email === ADMIN_EMAIL && pass === ADMIN_PASS) {
-    currentUser = { id: 'admin', email: 'admin', is_admin: true };
+    currentUser = { id: '00000000-0000-0000-0000-000000000000', email: 'admin@mypaceschool.com', is_admin: true };
     updateNavAuth();
     showToast('Admin access granted', 'success');
     showPage('admin');
@@ -1704,7 +1959,7 @@ async function signIn() {
     }
     currentUser = data.user;
   } else {
-    currentUser = { id: 'local-user', email: email, user_metadata: { full_name: email.split('@')[0] } };
+    currentUser = { id: '00000000-0000-0000-0000-000000000001', email: email, user_metadata: { full_name: email.split('@')[0] } };
   }
 
   showToast('Welcome back! 🚀', 'success');
@@ -1747,7 +2002,7 @@ async function signUp() {
     }
     msg.innerHTML = '<div class="form-success">✅ Account created! Confirm your email to continue.</div>';
   } else {
-    currentUser = { id: 'local-user', email, user_metadata: { full_name: fullName } };
+    currentUser = { id: '00000000-0000-0000-0000-000000000001', email, user_metadata: { full_name: fullName } };
     localStorage.setItem('innora_user', JSON.stringify(currentUser));
     showToast('Account created! 🎉', 'success');
     updateNavAuth();
@@ -1774,28 +2029,64 @@ function updateNavAuth() {
     const name = currentUser.user_metadata?.full_name || currentUser.email?.split('@')[0] || 'User';
     const initials = name.split(' ').map(n => n[0]).join('').toUpperCase();
     
+    const pfp = currentUser.user_metadata?.pfp;
+    const avatarHtml = pfp
+      ? `<img src="${pfp}" style="width:36px;height:36px;border-radius:8px;object-fit:cover;" />`
+      : `<div class="nav-user-avatar">${initials}</div>`;
+
     area.innerHTML = `
-      <div class="nav-user" onclick="showPage('profile')">
-        <div class="nav-user-avatar">${initials}</div>
+      <div class="nav-user" onclick="viewOwnProfile()">
+        ${avatarHtml}
         <span style="font-size: 14px;">${name.split(' ')[0]}</span>
       </div>
+      <button class="nav-link" onclick="handleLogout()" title="Logout" style="padding: 8px; color: var(--danger);">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+      </button>
     `;
     
     if (isAdmin()) {
       adminLink.style.display = 'inline-flex';
+    } else {
+      adminLink.style.display = 'none';
     }
+
+    const canPost = isOperator() || isModerator();
+    const addNewsBtn = document.getElementById('nav-add-news-btn');
+    const addProjBtn = document.getElementById('nav-add-project-btn');
+    if (addNewsBtn) addNewsBtn.style.display = canPost ? 'inline-flex' : 'none';
+    if (addProjBtn) addProjBtn.style.display = canPost ? 'inline-flex' : 'none';
     
     document.getElementById('feed-composer').classList.remove('hidden');
     updateComposerAvatar();
   } else {
     area.innerHTML = `<button class="btn btn-primary" onclick="showPage('login')">Sign In</button>`;
     adminLink.style.display = 'none';
+    const addNewsBtn = document.getElementById('nav-add-news-btn');
+    const addProjBtn = document.getElementById('nav-add-project-btn');
+    if (addNewsBtn) addNewsBtn.style.display = 'none';
+    if (addProjBtn) addProjBtn.style.display = 'none';
     document.getElementById('feed-composer').classList.add('hidden');
   }
 }
 
+function getUserRole() {
+  if (!currentUser) return null;
+  if (currentUser.is_admin === true) return 'operator';
+  return currentUser.user_metadata?.role || 'member';
+}
+
 function isAdmin() {
-  return currentUser?.is_admin === true || currentUser?.email === '1234';
+  const role = getUserRole();
+  return role === 'operator' || role === 'admin' || role === 'moderator';
+}
+
+function isOperator() {
+  const role = getUserRole();
+  return role === 'operator' || role === 'admin';
+}
+
+function isModerator() {
+  return getUserRole() === 'moderator';
 }
 
 // ─── IDEAS MANAGEMENT ───────────────────────────────────────
@@ -1866,7 +2157,7 @@ async function submitIdea() {
     creator_name: currentUser.user_metadata?.full_name || 'Anonymous',
     creator_bio: currentUser.user_metadata?.bio || '',
     creator_pfp: currentUser.user_metadata?.pfp || null,
-    status: 'pending',
+    status: 'approved', // CONTENT APPROVAL REMOVED HERE
     likes: 0,
     views: 0,
     created_at: new Date().toISOString()
@@ -1890,7 +2181,7 @@ async function submitIdea() {
     
     updateStats();
     renderFeed();
-    showToast('Idea submitted! ✨', 'success');
+    showToast('Idea shared directly! ✨', 'success');
   } catch (e) {
     msg.innerHTML = `<div class="form-error">${e.message}</div>`;
   } finally {
@@ -1903,12 +2194,38 @@ async function quickSubmit() {
   const text = document.getElementById('quick-submit').value.trim();
   if (!text) return;
 
-  document.getElementById('idea-title').value = text.substring(0, 100);
-  document.getElementById('idea-category').value = 'Other';
-  document.getElementById('idea-desc').value = text;
-  document.getElementById('quick-submit').value = '';
-  
-  openModal('submit-modal');
+  // Post directly via dynamic payload, passing direct approval bypassing confirmation steps entirely
+  const payload = {
+    title: text.substring(0, 100),
+    category: 'Other',
+    description: text,
+    creator_id: currentUser.id,
+    creator_name: currentUser.user_metadata?.full_name || 'Anonymous',
+    creator_bio: currentUser.user_metadata?.bio || '',
+    creator_pfp: currentUser.user_metadata?.pfp || null,
+    status: 'approved',
+    likes: 0,
+    views: 0,
+    created_at: new Date().toISOString()
+  };
+
+  try {
+    if (sb) {
+      const { data, error } = await sb.from('ideas').insert([payload]).select().single();
+      if (error) throw error;
+      allIdeas.unshift(data);
+    } else {
+      payload.id = Date.now().toString();
+      allIdeas.unshift(payload);
+      localStorage.setItem('innora_ideas', JSON.stringify(allIdeas));
+    }
+    document.getElementById('quick-submit').value = '';
+    updateStats();
+    renderFeed();
+    showToast('Idea shared directly! ✨', 'success');
+  } catch (e) {
+    showToast('Failed to post idea', 'error');
+  }
 }
 
 document.getElementById('idea-title')?.addEventListener('input', function() {
@@ -2017,24 +2334,55 @@ async function likeIdea(id) {
 }
 
 // ─── PROFILE PAGE ───────────────────────────────────────────
+function viewOwnProfile() {
+  if (!currentUser) { showPage('login'); return; }
+  showPage('profile');
+  renderProfile(currentUser.id);
+}
+
+async function handleLogout() {
+  if (!sb) return;
+  try {
+    const { error } = await sb.auth.signOut();
+    if (error) throw error;
+    showToast('Logged out successfully', 'success');
+    showPage('home');
+  } catch (err) {
+    console.error('Logout error:', err);
+    showToast('Logout failed', 'error');
+  }
+}
+
 function viewProfile(userId) {
   showPage('profile');
   renderProfile(userId);
 }
 
 function renderProfile(userId) {
+  const isOwn = currentUser?.id === userId;
   const ideas = allIdeas.filter(i => i.creator_id === userId);
-  if (!ideas.length) { showPage('feed'); return; }
-  
-  const creator = ideas[0];
   const totalLikes = ideas.reduce((s, i) => s + (i.likes || 0), 0);
-  const avatar = creator.creator_pfp ? `<img src="${creator.creator_pfp}" />` : getInitials(creator.creator_name);
+
+  // For own profile, pull name/bio/pfp from auth metadata even if no ideas yet
+  let name, bio, pfp;
+  if (isOwn) {
+    name = currentUser.user_metadata?.full_name || currentUser.email?.split('@')[0] || 'User';
+    bio  = currentUser.user_metadata?.bio || '';
+    pfp  = currentUser.user_metadata?.pfp || null;
+  } else {
+    if (!ideas.length) { showToast('No profile found', 'error'); return; }
+    name = ideas[0].creator_name;
+    bio  = ideas[0].creator_bio || '';
+    pfp  = ideas[0].creator_pfp || null;
+  }
+
+  const avatar = pfp ? `<img src="${pfp}" />` : getInitials(name);
 
   document.getElementById('profile-header').innerHTML = `
     <div class="profile-avatar-large">${avatar}</div>
-    <div class="profile-name">${escHtml(creator.creator_name)}</div>
-    <div class="profile-handle">@${escHtml(creator.creator_name.replace(/\s+/g, '').toLowerCase())}</div>
-    ${creator.creator_bio ? `<div class="profile-bio">${escHtml(creator.creator_bio)}</div>` : ''}
+    <div class="profile-name">${escHtml(name)}</div>
+    <div class="profile-handle">@${escHtml(name.replace(/\s+/g, '').toLowerCase())}</div>
+    ${bio ? `<div class="profile-bio">${escHtml(bio)}</div>` : ''}
     <div class="profile-stats">
       <div class="profile-stat">
         <div class="profile-stat-num">${ideas.length}</div>
@@ -2045,10 +2393,16 @@ function renderProfile(userId) {
         <div class="profile-stat-label">Likes</div>
       </div>
     </div>
-    ${currentUser?.id === userId ? `<div style="text-align:center"><button class="btn btn-primary" onclick="openModal('edit-profile-modal')">Edit Profile</button></div>` : ''}
+    ${isOwn ? `
+      <div style="text-align:center; display: flex; justify-content: center; gap: 12px; margin-top: 16px;">
+        <button class="btn btn-primary" onclick="openModal('edit-profile-modal')">Edit Profile</button>
+        <button class="btn btn-danger" onclick="handleLogout()">Log Out</button>
+      </div>` : ''}
   `;
 
-  document.getElementById('profile-posts').innerHTML = ideas.map(i => postCardHTML(i)).join('');
+  document.getElementById('profile-posts').innerHTML = ideas.length
+    ? ideas.map(i => postCardHTML(i)).join('')
+    : `<div class="empty-state"><div class="empty-icon">💡</div><div class="empty-title">No ideas shared yet</div><div class="empty-text">Share your first idea with the community!</div>${isOwn ? `<button class="btn btn-primary" onclick="submitIdeaCheckAuth()">Submit an Idea</button>` : ''}</div>`;
 }
 
 // ─── PROFILE EDITING ────────────────────────────────────────
@@ -2216,8 +2570,21 @@ function adminSection(section) {
   document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.admin-nav-item').forEach(n => n.classList.remove('active'));
   
-  document.getElementById('admin-' + section).classList.add('active');
-  document.querySelector(`[onclick="adminSection('${section}')"]`)?.classList.add('active');
+  const sectionMap = {
+    dashboard: 'admin-dashboard',
+    reports: 'admin-reports-section',
+    approve: 'admin-approve-section',
+    suggestions: 'admin-suggestions-section',
+    news: 'admin-news-section',
+    projects: 'admin-projects-section',
+    accounts: 'admin-accounts-section'
+  };
+
+  const sectionEl = document.getElementById(sectionMap[section]);
+  if (sectionEl) sectionEl.classList.add('active');
+
+  const navEl = document.querySelector(`[onclick="adminSection('${section}')"]`);
+  if (navEl) navEl.classList.add('active');
 }
 
 function loadAdminDashboard() {
@@ -2232,6 +2599,21 @@ function loadAdminDashboard() {
   renderReports();
   renderPendingIdeas();
   renderPendingCreators();
+
+  // Show/hide role-gated admin sidebar items
+  const canPost = isOperator() || isModerator();
+  const setNav = (id, show) => { const el = document.getElementById(id); if (el) el.style.display = show ? 'block' : 'none'; };
+  setNav('admin-nav-news', canPost);
+  setNav('admin-nav-projects', canPost);
+  setNav('admin-nav-accounts', isOperator());
+
+  if (canPost) {
+    renderAdminNews();
+    renderAdminProjects();
+  }
+  if (isOperator()) {
+    renderAccountsList();
+  }
 }
 
 function renderReports() {
@@ -2369,7 +2751,22 @@ function updateComposerAvatar() {
 // ─── MODALS ─────────────────────────────────────────────────
 function openModal(id) {
   const modal = document.getElementById(id);
-  if (modal) modal.classList.add('open');
+  if (modal) modal.classList.add("open");
+
+  if (id === "edit-profile-modal") {
+    if (currentUser) {
+      document.getElementById("bio-input").value = currentUser.user_metadata?.bio || "";
+      document.getElementById("bio-count").textContent = `${document.getElementById("bio-input").value.length} / 150`;
+      const pfpPreview = document.getElementById("pfp-preview");
+      if (currentUser.user_metadata?.pfp) {
+        pfpPreview.src = currentUser.user_metadata.pfp;
+        pfpPreview.classList.remove("hidden");
+      } else {
+        pfpPreview.src = "";
+        pfpPreview.classList.add("hidden");
+      }
+    }
+  }
 }
 
 function closeModal(id) {
@@ -2404,6 +2801,252 @@ function showToast(msg, type = '') {
 document.getElementById('suggestion-input')?.addEventListener('input', function() {
   document.getElementById('suggestion-count').textContent = this.value.length + ' / 500';
 });
+let allNews = [];
+
+async function loadNews() {
+  if (sb) {
+    const { data } = await sb.from('news').select('*').order('created_at', { ascending: false });
+    allNews = data || [];
+  }
+}
+
+function renderNewsFeed() {
+  const container = document.getElementById('news-feed');
+  if (!container) return;
+  if (!allNews.length) {
+    container.innerHTML = `<div class="empty-state"><div class="empty-icon">📰</div><div class="empty-title">No news yet</div><div class="empty-text">Check back soon for updates.</div></div>`;
+    return;
+  }
+  container.innerHTML = allNews.map(post => newsCardHTML(post, false)).join('');
+}
+
+function renderAdminNews() {
+  const container = document.getElementById('admin-news-list');
+  if (!container) return;
+  if (!allNews.length) {
+    container.innerHTML = `<div class="empty-state"><div class="empty-icon">📰</div><div class="empty-title">No news posts yet</div></div>`;
+    return;
+  }
+  container.innerHTML = allNews.map(post => newsCardHTML(post, true)).join('');
+}
+
+function newsCardHTML(post, showDelete) {
+  return `
+    <div class="news-card">
+      <div class="news-card-header">
+        <span class="post-category">${escHtml(post.category)}</span>
+        ${showDelete ? `<button class="btn btn-danger" style="padding:6px 14px;font-size:13px;" onclick="deleteNews('${post.id}')">Delete</button>` : `<span class="news-card-meta">${timeAgo(post.created_at)}</span>`}
+      </div>
+      <div class="news-card-title">${escHtml(post.title)}</div>
+      <div class="news-card-body">${escHtml(post.content)}</div>
+      ${showDelete ? `<div class="news-card-meta">${timeAgo(post.created_at)} · by ${escHtml(post.author_name || 'Admin')}</div>` : ''}
+    </div>
+  `;
+}
+
+async function submitNews() {
+  if (!isOperator() && !isModerator()) { showToast('Permission denied', 'error'); return; }
+  const title = document.getElementById('news-title').value.trim();
+  const category = document.getElementById('news-category').value;
+  const content = document.getElementById('news-body').value.trim();
+  const msg = document.getElementById('news-submit-msg');
+  const btn = document.getElementById('news-submit-btn');
+
+  msg.innerHTML = '';
+  if (!title) { msg.innerHTML = '<div class="form-error">Title required</div>'; return; }
+  if (!category) { msg.innerHTML = '<div class="form-error">Category required</div>'; return; }
+  if (content.length < 10) { msg.innerHTML = '<div class="form-error">Content too short</div>'; return; }
+
+  btn.disabled = true; btn.textContent = 'Publishing...';
+
+  // FIX: Fixed invalid syntax for type uuid error by passing authentic active currentUser.id layout data object parameter field instead of the textual custom word "admin"
+  const payload = {
+    title, category, content,
+    author_id: currentUser ? currentUser.id : "00000000-0000-0000-0000-000000000000",
+    author_name: currentUser.user_metadata?.full_name || currentUser.email?.split('@')[0] || 'Staff',
+    created_at: new Date().toISOString()
+  };
+
+  try {
+    if (sb) {
+      const { data, error } = await sb.from('news').insert([payload]).select().single();
+      if (error) throw error;
+      allNews.unshift(data);
+    } else {
+      payload.id = Date.now().toString();
+      allNews.unshift(payload);
+    }
+    closeModal('add-news-modal');
+    document.getElementById('news-title').value = '';
+    document.getElementById('news-category').value = '';
+    document.getElementById('news-body').value = '';
+    renderNewsFeed();
+    renderAdminNews();
+    showToast('News published! 📰', 'success');
+  } catch(e) {
+    msg.innerHTML = `<div class="form-error">${e.message}</div>`;
+  } finally {
+    btn.disabled = false; btn.textContent = 'Publish →';
+  }
+}
+
+async function deleteNews(id) {
+  if (!confirm('Delete this news post?')) return;
+  if (sb) await sb.from('news').delete().eq('id', id);
+  allNews = allNews.filter(n => n.id !== id);
+  renderAdminNews();
+  renderNewsFeed();
+  showToast('News post deleted', 'success');
+}
+
+// ─── PROJECTS ────────────────────────────────────────────────
+let allProjects = [];
+
+async function loadProjects() {
+  if (sb) {
+    const { data } = await sb.from('projects').select('*').order('created_at', { ascending: false });
+    allProjects = data || [];
+  }
+}
+
+function renderProjectsFeed() {
+  const container = document.getElementById('projects-feed');
+  if (!container) return;
+  if (!allProjects.length) {
+    container.innerHTML = `<div class="empty-state"><div class="empty-icon">🚀</div><div class="empty-title">No projects yet</div><div class="empty-text">Official projects will appear here.</div></div>`;
+    return;
+  }
+  container.innerHTML = allProjects.map(p => projectCardHTML(p, false)).join('');
+}
+
+function renderAdminProjects() {
+  const container = document.getElementById('admin-projects-list');
+  if (!container) return;
+  if (!allProjects.length) {
+    container.innerHTML = `<div class="empty-state"><div class="empty-icon">🚀</div><div class="empty-title">No projects yet</div></div>`;
+    return;
+  }
+  container.innerHTML = allProjects.map(p => projectCardHTML(p, true)).join('');
+}
+
+function projectCardHTML(p, showDelete) {
+  return `
+    <div class="project-card">
+      <div class="project-card-header">
+        <span class="post-category">${escHtml(p.category)}</span>
+        ${showDelete ? `<button class="btn btn-danger" style="padding:6px 14px;font-size:13px;" onclick="deleteProject('${p.id}')">Delete</button>` : `<span class="news-card-meta">${timeAgo(p.created_at)}</span>`}
+      </div>
+      <div class="project-card-title">${escHtml(p.name)}</div>
+      <div class="project-card-body">${escHtml(p.description)}</div>
+      <div class="project-card-meta">${p.team ? `Team: ${escHtml(p.team)} · ` : ''}${timeAgo(p.created_at)}</div>
+    </div>
+  `;
+}
+
+async function submitProject() {
+  if (!isOperator() && !isModerator()) { showToast('Permission denied', 'error'); return; }
+  const name = document.getElementById('project-name').value.trim();
+  const category = document.getElementById('project-category').value;
+  const desc = document.getElementById('project-desc').value.trim();
+  const team = document.getElementById('project-team').value.trim();
+  const msg = document.getElementById('project-submit-msg');
+  const btn = document.getElementById('project-submit-btn');
+
+  msg.innerHTML = '';
+  if (!name) { msg.innerHTML = '<div class="form-error">Name required</div>'; return; }
+  if (!category) { msg.innerHTML = '<div class="form-error">Category required</div>'; return; }
+  if (desc.length < 10) { msg.innerHTML = '<div class="form-error">Description too short</div>'; return; }
+
+  btn.disabled = true; btn.textContent = 'Creating...';
+
+  const payload = {
+    name, category, description: desc, team,
+    created_by: currentUser ? currentUser.id : "00000000-0000-0000-0000-000000000000",
+    created_at: new Date().toISOString()
+  };
+
+  try {
+    if (sb) {
+      const { data, error } = await sb.from('projects').insert([payload]).select().single();
+      if (error) throw error;
+      allProjects.unshift(data);
+    } else {
+      payload.id = Date.now().toString();
+      allProjects.unshift(payload);
+    }
+    closeModal('add-project-modal');
+    document.getElementById('project-name').value = '';
+    document.getElementById('project-category').value = '';
+    document.getElementById('project-desc').value = '';
+    document.getElementById('project-team').value = '';
+    renderProjectsFeed();
+    renderAdminProjects();
+    showToast('Project created! 🚀', 'success');
+  } catch(e) {
+    msg.innerHTML = `<div class="form-error">${e.message}</div>`;
+  } finally {
+    btn.disabled = false; btn.textContent = 'Create Project →';
+  }
+}
+
+async function deleteProject(id) {
+  if (!confirm('Delete this project?')) return;
+  if (sb) await sb.from('projects').delete().eq('id', id);
+  allProjects = allProjects.filter(p => p.id !== id);
+  renderAdminProjects();
+  renderProjectsFeed();
+  showToast('Project deleted', 'success');
+}
+
+// ─── ACCOUNTS ────────────────────────────────────────────────
+let allAccounts = [];
+
+async function loadAccounts() {
+  if (!isOperator()) return;
+  if (sb) {
+    const { data } = await sb.from('accounts').select('*').order('created_at', { ascending: true });
+    allAccounts = data || [];
+  }
+}
+
+function renderAccountsList() {
+  const tbody = document.getElementById('accounts-list');
+  if (!tbody) return;
+  if (!allAccounts.length) {
+    tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:40px;color:var(--text-secondary);">No accounts found</td></tr>';
+    return;
+  }
+  tbody.innerHTML = allAccounts.map(acc => `
+    <tr>
+      <td style="font-weight:600;">${escHtml(acc.full_name || acc.name || '—')}</td>
+      <td style="color:var(--text-secondary);">${escHtml(acc.email || '—')}</td>
+      <td><span class="role-badge role-${acc.role || 'member'}">${acc.role || 'member'}</span></td>
+      <td>
+        <select class="role-select" onchange="changeAccountRole('${acc.id}', this.value)">
+          <option value="member"    ${(acc.role||'member')==='member'    ? 'selected':''}>Member</option>
+          <option value="moderator" ${acc.role==='moderator' ? 'selected':''}>Moderator</option>
+          <option value="operator"  ${acc.role==='operator'  ? 'selected':''}>Operator</option>
+        </select>
+      </td>
+    </tr>
+  `).join('');
+}
+
+async function changeAccountRole(accountId, newRole) {
+  if (!isOperator()) { showToast('Permission denied', 'error'); return; }
+  try {
+    if (sb) {
+      const { error } = await sb.from('accounts').update({ role: newRole }).eq('id', accountId);
+      if (error) throw error;
+    }
+    const acc = allAccounts.find(a => a.id === accountId);
+    if (acc) acc.role = newRole;
+    renderAccountsList();
+    showToast('Role updated', 'success');
+  } catch(e) {
+    showToast('Failed to update role', 'error');
+  }
+}
 </script>
 
 </body>
