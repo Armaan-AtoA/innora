@@ -1687,8 +1687,8 @@ h1, h2, h3, h4, h5 { font-family: 'Poppins', sans-serif; font-weight: 700; }
       <!-- SIGN IN FORM -->
       <div id="signin-form">
         <div class="form-group">
-          <label class="form-label">Email (@mypaceschool.com)</label>
-          <input type="email" class="form-input" id="signin-email" placeholder="you@mypaceschool.com">
+          <label class="form-label">Email</label>
+          <input type="email" class="form-input" id="signin-email" placeholder="you@example.com">
         </div>
         <div class="form-group">
           <label class="form-label">Password</label>
@@ -1709,8 +1709,8 @@ h1, h2, h3, h4, h5 { font-family: 'Poppins', sans-serif; font-weight: 700; }
           <input type="text" class="form-input" id="signup-last" placeholder="Smith">
         </div>
         <div class="form-group">
-          <label class="form-label">Email (@mypaceschool.com)</label>
-          <input type="email" class="form-input" id="signup-email" placeholder="you@mypaceschool.com">
+          <label class="form-label">Email</label>
+          <input type="email" class="form-input" id="signup-email" placeholder="you@example.com">
         </div>
         <div class="form-group">
           <label class="form-label">Password (min. 6 characters)</label>
@@ -1834,7 +1834,6 @@ const SUPABASE_URL = 'https://vrgqdlgbfrjitmxgozzg.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZyZ3FkbGdiZnJqaXRteGdvenpnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzMTczNzcsImV4cCI6MjA5Nzg5MzM3N30.X1W0LZCETy8jTG2BOEtPckmNoGvQpXU1VPYKyhdrFGY';
 const ADMIN_EMAIL = '1234';
 const ADMIN_PASS = '1234';
-const ALLOWED_DOMAIN = '@mypaceschool.com';
 
 let sb;
 try {
@@ -1878,9 +1877,6 @@ async function init() {
   updateNavAuth();
   loadIdeas();
   updateStats();
-  await loadNews();
-  await loadProjects();
-  await loadAccounts();
 }
 
 window.addEventListener('DOMContentLoaded', init);
@@ -1905,8 +1901,6 @@ function showPage(id) {
   if (id === 'feed') renderFeed();
   if (id === 'leaderboard') renderLeaderboard();
   if (id === 'admin') loadAdminDashboard();
-  if (id === 'news') renderNewsFeed();
-  if (id === 'projects') renderProjectsFeed();
 }
 
 // ─── AUTH FUNCTIONS ─────────────────────────────────────────
@@ -1930,17 +1924,12 @@ async function signIn() {
 
   msg.innerHTML = '';
   
-  // ADMIN LOGIN BYPASS (Generate fake valid UUID string format for custom admin dashboard profile tasks if matching local mock layout logic)
+  // ADMIN LOGIN BYPASS
   if (email === ADMIN_EMAIL && pass === ADMIN_PASS) {
-    currentUser = { id: '00000000-0000-0000-0000-000000000000', email: 'admin@mypaceschool.com', is_admin: true };
+    currentUser = { id: '00000000-0000-0000-0000-000000000000', email: 'admin@example.com', is_admin: true };
     updateNavAuth();
     showToast('Admin access granted', 'success');
     showPage('admin');
-    return;
-  }
-
-  if (!email.endsWith(ALLOWED_DOMAIN)) {
-    msg.innerHTML = `<div class="form-error">Please use your ${ALLOWED_DOMAIN} email</div>`;
     return;
   }
 
@@ -1980,7 +1969,6 @@ async function signUp() {
   msg.innerHTML = '';
   
   if (!firstName || !lastName) { msg.innerHTML = '<div class="form-error">Please enter your name</div>'; return; }
-  if (!email.endsWith(ALLOWED_DOMAIN)) { msg.innerHTML = `<div class="form-error">Use your ${ALLOWED_DOMAIN} email</div>`; return; }
   if (pass.length < 6) { msg.innerHTML = '<div class="form-error">Password must be 6+ characters</div>'; return; }
 
   btn.disabled = true;
@@ -2057,7 +2045,7 @@ function updateNavAuth() {
     if (addProjBtn) addProjBtn.style.display = canPost ? 'inline-flex' : 'none';
     
     document.getElementById('feed-composer').classList.remove('hidden');
-    updateComposerAvatar();
+    // updateComposerAvatar();
   } else {
     area.innerHTML = `<button class="btn btn-primary" onclick="showPage('login')">Sign In</button>`;
     adminLink.style.display = 'none';
@@ -2194,7 +2182,6 @@ async function quickSubmit() {
   const text = document.getElementById('quick-submit').value.trim();
   if (!text) return;
 
-  // Post directly via dynamic payload, passing direct approval bypassing confirmation steps entirely
   const payload = {
     title: text.substring(0, 100),
     category: 'Other',
@@ -2470,6 +2457,31 @@ async function updateProfile() {
   }
 }
 
+// ─── UTILITIES & HELPERS ────────────────────────────────────
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+function showToast(msg, type = 'success') {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'toast show ' + type;
+  setTimeout(() => el.classList.remove('show'), 3000);
+}
+function escHtml(str) {
+  if (!str) return '';
+  const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
+  return str.replace(/[&<>"']/g, m => map[m]);
+}
+function truncate(str, len) { return str.length > len ? str.substring(0, len) + '...' : str; }
+function getInitials(name) { return name ? name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0,2) : '?'; }
+function timeAgo(dateStr) {
+  const diff = Date.now() - new Date(dateStr).getTime();
+  const min = Math.floor(diff / 60000);
+  if (min < 60) return min + 'm ago';
+  const hr = Math.floor(min / 60);
+  if (hr < 24) return hr + 'h ago';
+  return Math.floor(hr / 24) + 'd ago';
+}
+
 // ─── LEADERBOARD ────────────────────────────────────────────
 function renderLeaderboard() {
   const container = document.getElementById('leaderboard-content');
@@ -2606,14 +2618,6 @@ function loadAdminDashboard() {
   setNav('admin-nav-news', canPost);
   setNav('admin-nav-projects', canPost);
   setNav('admin-nav-accounts', isOperator());
-
-  if (canPost) {
-    renderAdminNews();
-    renderAdminProjects();
-  }
-  if (isOperator()) {
-    renderAccountsList();
-  }
 }
 
 function renderReports() {
@@ -2691,363 +2695,18 @@ function suggestToCreator(creatorId) {
 async function approveIdea(id) {
   const idea = allIdeas.find(i => i.id === id);
   if (!idea) return;
-
   idea.status = 'approved';
+  
   if (sb) {
     await sb.from('ideas').update({ status: 'approved' }).eq('id', id);
-  }
-
-  loadAdminDashboard();
-  showToast('Idea approved! 🎉', 'success');
-}
-
-async function removeIdea(id) {
-  if (!confirm('Remove this idea?')) return;
-
-  if (sb) {
-    await sb.from('ideas').delete().eq('id', id);
-  }
-  allIdeas = allIdeas.filter(i => i.id !== id);
-  loadAdminDashboard();
-  showToast('Idea removed', 'success');
-}
-
-// ─── UTILITIES ──────────────────────────────────────────────
-function escHtml(str) {
-  return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
-function truncate(str, n) {
-  return str && str.length > n ? str.slice(0, n) + '…' : str || '';
-}
-
-function timeAgo(ts) {
-  if (!ts) return 'now';
-  const diff = Date.now() - new Date(ts).getTime();
-  const mins = Math.floor(diff / 60000);
-  if (mins < 1) return 'now';
-  if (mins < 60) return mins + 'm';
-  const hrs = Math.floor(mins / 60);
-  if (hrs < 24) return hrs + 'h';
-  const days = Math.floor(hrs / 24);
-  if (days < 7) return days + 'd';
-  return new Date(ts).toLocaleDateString();
-}
-
-function getInitials(name) {
-  return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
-}
-
-function updateComposerAvatar() {
-  const avatar = document.getElementById('composer-avatar');
-  if (!avatar) return;
-  if (currentUser?.user_metadata?.pfp) {
-    avatar.innerHTML = `<img src="${currentUser.user_metadata.pfp}" />`;
   } else {
-    avatar.textContent = getInitials(currentUser?.user_metadata?.full_name || 'U');
+    localStorage.setItem('innora_ideas', JSON.stringify(allIdeas));
   }
-}
-
-// ─── MODALS ─────────────────────────────────────────────────
-function openModal(id) {
-  const modal = document.getElementById(id);
-  if (modal) modal.classList.add("open");
-
-  if (id === "edit-profile-modal") {
-    if (currentUser) {
-      document.getElementById("bio-input").value = currentUser.user_metadata?.bio || "";
-      document.getElementById("bio-count").textContent = `${document.getElementById("bio-input").value.length} / 150`;
-      const pfpPreview = document.getElementById("pfp-preview");
-      if (currentUser.user_metadata?.pfp) {
-        pfpPreview.src = currentUser.user_metadata.pfp;
-        pfpPreview.classList.remove("hidden");
-      } else {
-        pfpPreview.src = "";
-        pfpPreview.classList.add("hidden");
-      }
-    }
-  }
-}
-
-function closeModal(id) {
-  const modal = document.getElementById(id);
-  if (modal) modal.classList.remove('open');
-}
-
-document.querySelectorAll('.modal-overlay').forEach(overlay => {
-  overlay.addEventListener('click', e => {
-    if (e.target === overlay) closeModal(overlay.id);
-  });
-});
-
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') {
-    document.querySelectorAll('.modal-overlay.open').forEach(m => closeModal(m.id));
-  }
-});
-
-// ─── TOAST ──────────────────────────────────────────────────
-let toastTimer;
-function showToast(msg, type = '') {
-  const t = document.getElementById('toast');
-  if (!t) return;
-  t.textContent = msg;
-  t.className = 'toast ' + type + ' show';
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
-}
-
-// ─── SUGGESTIONS ─────────────────────────────────────────────
-document.getElementById('suggestion-input')?.addEventListener('input', function() {
-  document.getElementById('suggestion-count').textContent = this.value.length + ' / 500';
-});
-let allNews = [];
-
-async function loadNews() {
-  if (sb) {
-    const { data } = await sb.from('news').select('*').order('created_at', { ascending: false });
-    allNews = data || [];
-  }
-}
-
-function renderNewsFeed() {
-  const container = document.getElementById('news-feed');
-  if (!container) return;
-  if (!allNews.length) {
-    container.innerHTML = `<div class="empty-state"><div class="empty-icon">📰</div><div class="empty-title">No news yet</div><div class="empty-text">Check back soon for updates.</div></div>`;
-    return;
-  }
-  container.innerHTML = allNews.map(post => newsCardHTML(post, false)).join('');
-}
-
-function renderAdminNews() {
-  const container = document.getElementById('admin-news-list');
-  if (!container) return;
-  if (!allNews.length) {
-    container.innerHTML = `<div class="empty-state"><div class="empty-icon">📰</div><div class="empty-title">No news posts yet</div></div>`;
-    return;
-  }
-  container.innerHTML = allNews.map(post => newsCardHTML(post, true)).join('');
-}
-
-function newsCardHTML(post, showDelete) {
-  return `
-    <div class="news-card">
-      <div class="news-card-header">
-        <span class="post-category">${escHtml(post.category)}</span>
-        ${showDelete ? `<button class="btn btn-danger" style="padding:6px 14px;font-size:13px;" onclick="deleteNews('${post.id}')">Delete</button>` : `<span class="news-card-meta">${timeAgo(post.created_at)}</span>`}
-      </div>
-      <div class="news-card-title">${escHtml(post.title)}</div>
-      <div class="news-card-body">${escHtml(post.content)}</div>
-      ${showDelete ? `<div class="news-card-meta">${timeAgo(post.created_at)} · by ${escHtml(post.author_name || 'Admin')}</div>` : ''}
-    </div>
-  `;
-}
-
-async function submitNews() {
-  if (!isOperator() && !isModerator()) { showToast('Permission denied', 'error'); return; }
-  const title = document.getElementById('news-title').value.trim();
-  const category = document.getElementById('news-category').value;
-  const content = document.getElementById('news-body').value.trim();
-  const msg = document.getElementById('news-submit-msg');
-  const btn = document.getElementById('news-submit-btn');
-
-  msg.innerHTML = '';
-  if (!title) { msg.innerHTML = '<div class="form-error">Title required</div>'; return; }
-  if (!category) { msg.innerHTML = '<div class="form-error">Category required</div>'; return; }
-  if (content.length < 10) { msg.innerHTML = '<div class="form-error">Content too short</div>'; return; }
-
-  btn.disabled = true; btn.textContent = 'Publishing...';
-
-  // FIX: Fixed invalid syntax for type uuid error by passing authentic active currentUser.id layout data object parameter field instead of the textual custom word "admin"
-  const payload = {
-    title, category, content,
-    author_id: currentUser ? currentUser.id : "00000000-0000-0000-0000-000000000000",
-    author_name: currentUser.user_metadata?.full_name || currentUser.email?.split('@')[0] || 'Staff',
-    created_at: new Date().toISOString()
-  };
-
-  try {
-    if (sb) {
-      const { data, error } = await sb.from('news').insert([payload]).select().single();
-      if (error) throw error;
-      allNews.unshift(data);
-    } else {
-      payload.id = Date.now().toString();
-      allNews.unshift(payload);
-    }
-    closeModal('add-news-modal');
-    document.getElementById('news-title').value = '';
-    document.getElementById('news-category').value = '';
-    document.getElementById('news-body').value = '';
-    renderNewsFeed();
-    renderAdminNews();
-    showToast('News published! 📰', 'success');
-  } catch(e) {
-    msg.innerHTML = `<div class="form-error">${e.message}</div>`;
-  } finally {
-    btn.disabled = false; btn.textContent = 'Publish →';
-  }
-}
-
-async function deleteNews(id) {
-  if (!confirm('Delete this news post?')) return;
-  if (sb) await sb.from('news').delete().eq('id', id);
-  allNews = allNews.filter(n => n.id !== id);
-  renderAdminNews();
-  renderNewsFeed();
-  showToast('News post deleted', 'success');
-}
-
-// ─── PROJECTS ────────────────────────────────────────────────
-let allProjects = [];
-
-async function loadProjects() {
-  if (sb) {
-    const { data } = await sb.from('projects').select('*').order('created_at', { ascending: false });
-    allProjects = data || [];
-  }
-}
-
-function renderProjectsFeed() {
-  const container = document.getElementById('projects-feed');
-  if (!container) return;
-  if (!allProjects.length) {
-    container.innerHTML = `<div class="empty-state"><div class="empty-icon">🚀</div><div class="empty-title">No projects yet</div><div class="empty-text">Official projects will appear here.</div></div>`;
-    return;
-  }
-  container.innerHTML = allProjects.map(p => projectCardHTML(p, false)).join('');
-}
-
-function renderAdminProjects() {
-  const container = document.getElementById('admin-projects-list');
-  if (!container) return;
-  if (!allProjects.length) {
-    container.innerHTML = `<div class="empty-state"><div class="empty-icon">🚀</div><div class="empty-title">No projects yet</div></div>`;
-    return;
-  }
-  container.innerHTML = allProjects.map(p => projectCardHTML(p, true)).join('');
-}
-
-function projectCardHTML(p, showDelete) {
-  return `
-    <div class="project-card">
-      <div class="project-card-header">
-        <span class="post-category">${escHtml(p.category)}</span>
-        ${showDelete ? `<button class="btn btn-danger" style="padding:6px 14px;font-size:13px;" onclick="deleteProject('${p.id}')">Delete</button>` : `<span class="news-card-meta">${timeAgo(p.created_at)}</span>`}
-      </div>
-      <div class="project-card-title">${escHtml(p.name)}</div>
-      <div class="project-card-body">${escHtml(p.description)}</div>
-      <div class="project-card-meta">${p.team ? `Team: ${escHtml(p.team)} · ` : ''}${timeAgo(p.created_at)}</div>
-    </div>
-  `;
-}
-
-async function submitProject() {
-  if (!isOperator() && !isModerator()) { showToast('Permission denied', 'error'); return; }
-  const name = document.getElementById('project-name').value.trim();
-  const category = document.getElementById('project-category').value;
-  const desc = document.getElementById('project-desc').value.trim();
-  const team = document.getElementById('project-team').value.trim();
-  const msg = document.getElementById('project-submit-msg');
-  const btn = document.getElementById('project-submit-btn');
-
-  msg.innerHTML = '';
-  if (!name) { msg.innerHTML = '<div class="form-error">Name required</div>'; return; }
-  if (!category) { msg.innerHTML = '<div class="form-error">Category required</div>'; return; }
-  if (desc.length < 10) { msg.innerHTML = '<div class="form-error">Description too short</div>'; return; }
-
-  btn.disabled = true; btn.textContent = 'Creating...';
-
-  const payload = {
-    name, category, description: desc, team,
-    created_by: currentUser ? currentUser.id : "00000000-0000-0000-0000-000000000000",
-    created_at: new Date().toISOString()
-  };
-
-  try {
-    if (sb) {
-      const { data, error } = await sb.from('projects').insert([payload]).select().single();
-      if (error) throw error;
-      allProjects.unshift(data);
-    } else {
-      payload.id = Date.now().toString();
-      allProjects.unshift(payload);
-    }
-    closeModal('add-project-modal');
-    document.getElementById('project-name').value = '';
-    document.getElementById('project-category').value = '';
-    document.getElementById('project-desc').value = '';
-    document.getElementById('project-team').value = '';
-    renderProjectsFeed();
-    renderAdminProjects();
-    showToast('Project created! 🚀', 'success');
-  } catch(e) {
-    msg.innerHTML = `<div class="form-error">${e.message}</div>`;
-  } finally {
-    btn.disabled = false; btn.textContent = 'Create Project →';
-  }
-}
-
-async function deleteProject(id) {
-  if (!confirm('Delete this project?')) return;
-  if (sb) await sb.from('projects').delete().eq('id', id);
-  allProjects = allProjects.filter(p => p.id !== id);
-  renderAdminProjects();
-  renderProjectsFeed();
-  showToast('Project deleted', 'success');
-}
-
-// ─── ACCOUNTS ────────────────────────────────────────────────
-let allAccounts = [];
-
-async function loadAccounts() {
-  if (!isOperator()) return;
-  if (sb) {
-    const { data } = await sb.from('accounts').select('*').order('created_at', { ascending: true });
-    allAccounts = data || [];
-  }
-}
-
-function renderAccountsList() {
-  const tbody = document.getElementById('accounts-list');
-  if (!tbody) return;
-  if (!allAccounts.length) {
-    tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:40px;color:var(--text-secondary);">No accounts found</td></tr>';
-    return;
-  }
-  tbody.innerHTML = allAccounts.map(acc => `
-    <tr>
-      <td style="font-weight:600;">${escHtml(acc.full_name || acc.name || '—')}</td>
-      <td style="color:var(--text-secondary);">${escHtml(acc.email || '—')}</td>
-      <td><span class="role-badge role-${acc.role || 'member'}">${acc.role || 'member'}</span></td>
-      <td>
-        <select class="role-select" onchange="changeAccountRole('${acc.id}', this.value)">
-          <option value="member"    ${(acc.role||'member')==='member'    ? 'selected':''}>Member</option>
-          <option value="moderator" ${acc.role==='moderator' ? 'selected':''}>Moderator</option>
-          <option value="operator"  ${acc.role==='operator'  ? 'selected':''}>Operator</option>
-        </select>
-      </td>
-    </tr>
-  `).join('');
-}
-
-async function changeAccountRole(accountId, newRole) {
-  if (!isOperator()) { showToast('Permission denied', 'error'); return; }
-  try {
-    if (sb) {
-      const { error } = await sb.from('accounts').update({ role: newRole }).eq('id', accountId);
-      if (error) throw error;
-    }
-    const acc = allAccounts.find(a => a.id === accountId);
-    if (acc) acc.role = newRole;
-    renderAccountsList();
-    showToast('Role updated', 'success');
-  } catch(e) {
-    showToast('Failed to update role', 'error');
-  }
+  
+  loadAdminDashboard();
+  renderFeed();
+  showToast('Idea approved!', 'success');
 }
 </script>
-
 </body>
 </html>
