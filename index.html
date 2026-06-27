@@ -517,6 +517,16 @@ h1, h2, h3, h4, h5 { font-family: 'Poppins', sans-serif; font-weight: 700; }
   color: #16a34a;
 }
 
+.status-pending {
+  background: rgba(245, 158, 11, 0.15);
+  color: var(--accent);
+}
+
+.status-revision {
+  background: rgba(239, 68, 68, 0.15);
+  color: var(--danger);
+}
+
 .post-footer {
   display: flex;
   gap: 16px;
@@ -1355,7 +1365,7 @@ h1, h2, h3, h4, h5 { font-family: 'Poppins', sans-serif; font-weight: 700; }
       <button class="nav-link" onclick="showPage('news')">News</button>
       <button class="nav-link" onclick="showPage('projects')">Projects</button>
       <button class="nav-link" onclick="showPage('leaderboard')">Innovators</button>
-      <button class="nav-link" id="nav-admin-link" style="display:none" onclick="showPage('admin')">Admin</button>
+      <button class="nav-link" id="nav-admin-link" style="display:none" onclick="showPage('admin')">Admin Panel</button>
     </div>
   </div>
   <div class="nav-right" id="nav-auth-area">
@@ -1407,6 +1417,45 @@ h1, h2, h3, h4, h5 { font-family: 'Poppins', sans-serif; font-weight: 700; }
   </div>
 </div>
 
+<!-- RESUBMIT MODAL (edit idea after "needs revision") -->
+<div class="modal-overlay" id="resubmit-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('resubmit-modal')">✕</button>
+    <div class="modal-title">Edit & Resubmit</div>
+    <div class="modal-sub">Make the changes the admin requested, then resubmit for review.</div>
+    
+    <div class="form-group">
+      <label class="form-label">Idea Title *</label>
+      <input type="text" class="form-input" id="resubmit-title" maxlength="100">
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Category *</label>
+      <select class="form-select" id="resubmit-category">
+        <option value="">Select a category</option>
+        <option>EdTech</option>
+        <option>Environment</option>
+        <option>Health</option>
+        <option>Mobility</option>
+        <option>Food & Agriculture</option>
+        <option>Design</option>
+        <option>Community</option>
+        <option>Clean Energy</option>
+        <option>AI/ML</option>
+        <option>Other</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Description *</label>
+      <textarea class="form-textarea" id="resubmit-desc" maxlength="1000"></textarea>
+    </div>
+
+    <div id="resubmit-msg"></div>
+    <button class="form-submit" id="resubmit-btn" onclick="resubmitIdea()">Resubmit for Review →</button>
+  </div>
+</div>
+
 <!-- EDIT PROFILE MODAL -->
 <div class="modal-overlay" id="edit-profile-modal">
   <div class="modal">
@@ -1422,6 +1471,7 @@ h1, h2, h3, h4, h5 { font-family: 'Poppins', sans-serif; font-weight: 700; }
         <div class="upload-text">Click to upload or drag and drop</div>
       </div>
       <img id="pfp-preview" class="upload-preview hidden" />
+      <button type="button" class="btn btn-danger" id="remove-pfp-btn" style="margin-top:10px; display:none;" onclick="removePfp()">🗑️ Remove Profile Picture</button>
     </div>
 
     <div class="form-group">
@@ -1443,6 +1493,23 @@ h1, h2, h3, h4, h5 { font-family: 'Poppins', sans-serif; font-weight: 700; }
   </div>
 </div>
 
+<!-- REPORT MODAL -->
+<div class="modal-overlay" id="report-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('report-modal')">✕</button>
+    <div class="modal-title">Report This Idea</div>
+    <div class="modal-sub">Let us know what's wrong with this post.</div>
+    
+    <div class="form-group">
+      <label class="form-label">Reason *</label>
+      <textarea class="form-textarea" id="report-reason" placeholder="Why are you reporting this?" maxlength="500"></textarea>
+    </div>
+    
+    <div id="report-msg"></div>
+    <button class="form-submit" onclick="sendReport()">Submit Report →</button>
+  </div>
+</div>
+
 <!-- SUGGESTION MODAL (Admin) -->
 <div class="modal-overlay" id="suggestion-modal">
   <div class="modal">
@@ -1458,6 +1525,23 @@ h1, h2, h3, h4, h5 { font-family: 'Poppins', sans-serif; font-weight: 700; }
     
     <div id="suggestion-msg"></div>
     <button class="form-submit" onclick="sendSuggestion()">Send Suggestion →</button>
+  </div>
+</div>
+
+<!-- FEEDBACK / REQUEST CHANGES MODAL (Admin, on pending ideas) -->
+<div class="modal-overlay" id="feedback-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('feedback-modal')">✕</button>
+    <div class="modal-title">Request Changes</div>
+    <div class="modal-sub">Tell the creator what needs to change before this can be approved. They'll be able to edit and resubmit.</div>
+    
+    <div class="form-group">
+      <label class="form-label">Feedback *</label>
+      <textarea class="form-textarea" id="feedback-input" placeholder="What needs to be fixed or improved?" maxlength="500"></textarea>
+    </div>
+    
+    <div id="feedback-msg"></div>
+    <button class="form-submit" onclick="sendFeedback()">Send Feedback →</button>
   </div>
 </div>
 
@@ -1730,7 +1814,6 @@ h1, h2, h3, h4, h5 { font-family: 'Poppins', sans-serif; font-weight: 700; }
       <div class="admin-nav-item active" onclick="adminSection('dashboard')">📊 Dashboard</div>
       <div class="admin-nav-item" onclick="adminSection('reports')">🚨 Reports</div>
       <div class="admin-nav-item" onclick="adminSection('approve')">✅ Approve Ideas</div>
-      <div class="admin-nav-item" onclick="adminSection('suggestions')">💬 Send Suggestions</div>
       <div class="admin-nav-item" id="admin-nav-news" style="display:none" onclick="adminSection('news')">📰 News</div>
       <div class="admin-nav-item" id="admin-nav-projects" style="display:none" onclick="adminSection('projects')">🚀 Projects</div>
       <div class="admin-nav-item" id="admin-nav-accounts" style="display:none" onclick="adminSection('accounts')">👥 Accounts</div>
@@ -1773,13 +1856,6 @@ h1, h2, h3, h4, h5 { font-family: 'Poppins', sans-serif; font-weight: 700; }
         <h2 class="section-title">Approve Ideas</h2>
         <p class="section-sub">Review pending ideas and approve them for the platform.</p>
         <div id="pending-ideas-list"></div>
-      </div>
-
-      <!-- Suggestions -->
-      <div class="admin-section" id="admin-suggestions-section">
-        <h2 class="section-title">Send Suggestions</h2>
-        <p class="section-sub">Provide constructive feedback to idea creators.</p>
-        <div id="pending-creators-list"></div>
       </div>
 
       <!-- News Management -->
@@ -1832,8 +1908,6 @@ h1, h2, h3, h4, h5 { font-family: 'Poppins', sans-serif; font-weight: 700; }
 // ─── CONFIGURATION ──────────────────────────────────────────
 const SUPABASE_URL = 'https://vrgqdlgbfrjitmxgozzg.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZyZ3FkbGdiZnJqaXRteGdvenpnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzMTczNzcsImV4cCI6MjA5Nzg5MzM3N30.X1W0LZCETy8jTG2BOEtPckmNoGvQpXU1VPYKyhdrFGY';
-const ADMIN_EMAIL = '1234';
-const ADMIN_PASS = '1234';
 
 let sb;
 try {
@@ -1844,8 +1918,12 @@ try {
 
 // ─── STATE ──────────────────────────────────────────────────
 let currentUser = null;
+let currentAccount = null; // row from `accounts` table: { id, full_name, email, role, created_at }
 let allIdeas = [];
 let allReports = [];
+let allAccounts = [];
+let allNews = [];
+let allProjects = [];
 let currentFilter = '';
 let likedIdeas = new Set(JSON.parse(localStorage.getItem('innora_likes') || '[]'));
 
@@ -1860,9 +1938,56 @@ const mockIdeas = [
 if (sb) {
   sb.auth.onAuthStateChange((event, session) => {
     currentUser = session?.user ?? null;
-    updateNavAuth();
-    loadIdeas();
+    if (currentUser) {
+      loadAccount().then(() => {
+        updateNavAuth();
+        loadIdeas();
+      });
+    } else {
+      currentAccount = null;
+      updateNavAuth();
+      loadIdeas();
+    }
   });
+}
+
+// ─── ACCOUNTS / ROLES ───────────────────────────────────────
+// Fetches (or creates) the accounts row for the signed-in user and caches it
+// in currentAccount. This is the single source of truth for role.
+async function loadAccount() {
+  if (!sb || !currentUser) { currentAccount = null; return; }
+
+  try {
+    const { data, error } = await sb
+      .from('accounts')
+      .select('*')
+      .eq('id', currentUser.id)
+      .maybeSingle();
+
+    if (error) throw error;
+
+    if (data) {
+      currentAccount = data;
+    } else {
+      // First time this user has authenticated — create their accounts row.
+      const newAccount = {
+        id: currentUser.id,
+        full_name: currentUser.user_metadata?.full_name || currentUser.email?.split('@')[0] || 'User',
+        email: currentUser.email || null,
+        role: 'member'
+      };
+      const { data: created, error: insErr } = await sb
+        .from('accounts')
+        .insert([newAccount])
+        .select()
+        .single();
+      if (insErr) throw insErr;
+      currentAccount = created;
+    }
+  } catch (e) {
+    console.warn('loadAccount failed', e);
+    currentAccount = { id: currentUser.id, role: 'member', full_name: currentUser.user_metadata?.full_name || 'User', email: currentUser.email };
+  }
 }
 
 async function init() {
@@ -1874,6 +1999,7 @@ async function init() {
       console.warn("Session check failed");
     }
   }
+  if (currentUser) await loadAccount();
   updateNavAuth();
   loadIdeas();
   updateStats();
@@ -1901,6 +2027,8 @@ function showPage(id) {
   if (id === 'feed') renderFeed();
   if (id === 'leaderboard') renderLeaderboard();
   if (id === 'admin') loadAdminDashboard();
+  if (id === 'news') loadNews();
+  if (id === 'projects') loadProjects();
 }
 
 // ─── AUTH FUNCTIONS ─────────────────────────────────────────
@@ -1923,15 +2051,6 @@ async function signIn() {
   const btn = document.getElementById('signin-btn');
 
   msg.innerHTML = '';
-  
-  // ADMIN LOGIN BYPASS
-  if (email === ADMIN_EMAIL && pass === ADMIN_PASS) {
-    currentUser = { id: '00000000-0000-0000-0000-000000000000', email: 'admin@example.com', is_admin: true };
-    updateNavAuth();
-    showToast('Admin access granted', 'success');
-    showPage('admin');
-    return;
-  }
 
   if (!email || !pass) { msg.innerHTML = '<div class="form-error">Fill in all fields</div>'; return; }
   
@@ -1947,8 +2066,10 @@ async function signIn() {
       return; 
     }
     currentUser = data.user;
+    await loadAccount();
   } else {
     currentUser = { id: '00000000-0000-0000-0000-000000000001', email: email, user_metadata: { full_name: email.split('@')[0] } };
+    currentAccount = { id: currentUser.id, full_name: currentUser.user_metadata.full_name, email, role: 'member' };
   }
 
   showToast('Welcome back! 🚀', 'success');
@@ -1988,6 +2109,22 @@ async function signUp() {
       btn.textContent = 'Create Account →';
       return; 
     }
+    // Create the accounts row right away (role defaults to 'member').
+    // If email confirmation is on, data.user will exist but there's no
+    // active session yet — that's fine, loadAccount() will pick this up on signIn.
+    if (data.user) {
+      try {
+        const { error: acctErr } = await sb.from('accounts').insert([{
+          id: data.user.id,
+          full_name: fullName,
+          email,
+          role: 'member'
+        }]);
+        if (acctErr) console.error('Could not create accounts row on signup:', acctErr);
+      } catch (e) {
+        console.warn('Could not pre-create accounts row', e);
+      }
+    }
     msg.innerHTML = '<div class="form-success">✅ Account created! Confirm your email to continue.</div>';
   } else {
     currentUser = { id: '00000000-0000-0000-0000-000000000001', email, user_metadata: { full_name: fullName } };
@@ -2004,6 +2141,7 @@ async function signUp() {
 async function signOut() {
   if (sb) await sb.auth.signOut();
   currentUser = null;
+  currentAccount = null;
   updateNavAuth();
   showToast('Signed out', 'success');
   showPage('home');
@@ -2014,7 +2152,7 @@ function updateNavAuth() {
   const adminLink = document.getElementById('nav-admin-link');
   
   if (currentUser) {
-    const name = currentUser.user_metadata?.full_name || currentUser.email?.split('@')[0] || 'User';
+    const name = currentAccount?.full_name || currentUser.user_metadata?.full_name || currentUser.email?.split('@')[0] || 'User';
     const initials = name.split(' ').map(n => n[0]).join('').toUpperCase();
     
     const pfp = currentUser.user_metadata?.pfp;
@@ -2059,8 +2197,7 @@ function updateNavAuth() {
 
 function getUserRole() {
   if (!currentUser) return null;
-  if (currentUser.is_admin === true) return 'operator';
-  return currentUser.user_metadata?.role || 'member';
+  return currentAccount?.role || 'member';
 }
 
 function isAdmin() {
@@ -2092,9 +2229,25 @@ async function loadIdeas() {
     console.warn("Load ideas failed, using mock", e);
     allIdeas = mockIdeas;
   }
-  
+
+  await stampSuggestionFlags();
   updateStats();
   renderFeed();
+}
+
+// Marks each idea with `has_suggestion: true` if a row exists for it in the
+// `suggestions` table, so cards/badges can show "Suggestion Given" without
+// a separate round trip per idea.
+async function stampSuggestionFlags() {
+  if (!sb || !allIdeas.length) return;
+  try {
+    const { data, error } = await sb.from('suggestions').select('idea_id');
+    if (error) throw error;
+    const withSuggestion = new Set((data || []).map(s => s.idea_id));
+    allIdeas.forEach(idea => { idea.has_suggestion = withSuggestion.has(idea.id); });
+  } catch (e) {
+    console.warn('Could not load suggestion flags', e);
+  }
 }
 
 function updateStats() {
@@ -2142,10 +2295,10 @@ async function submitIdea() {
     category,
     description: desc,
     creator_id: currentUser.id,
-    creator_name: currentUser.user_metadata?.full_name || 'Anonymous',
+    creator_name: currentAccount?.full_name || currentUser.user_metadata?.full_name || 'Anonymous',
     creator_bio: currentUser.user_metadata?.bio || '',
     creator_pfp: currentUser.user_metadata?.pfp || null,
-    status: 'approved', // CONTENT APPROVAL REMOVED HERE
+    status: 'pending', // goes to admin panel for approval before it's public
     likes: 0,
     views: 0,
     created_at: new Date().toISOString()
@@ -2166,10 +2319,12 @@ async function submitIdea() {
     document.getElementById('idea-title').value = '';
     document.getElementById('idea-category').value = '';
     document.getElementById('idea-desc').value = '';
+    document.getElementById('title-count').textContent = '0 / 100';
+    document.getElementById('desc-count').textContent = '0 / 1000';
     
     updateStats();
     renderFeed();
-    showToast('Idea shared directly! ✨', 'success');
+    showToast('Idea submitted for review! 📝', 'success');
   } catch (e) {
     msg.innerHTML = `<div class="form-error">${e.message}</div>`;
   } finally {
@@ -2178,40 +2333,23 @@ async function submitIdea() {
   }
 }
 
-async function quickSubmit() {
-  const text = document.getElementById('quick-submit').value.trim();
-  if (!text) return;
-
-  const payload = {
-    title: text.substring(0, 100),
-    category: 'Other',
-    description: text,
-    creator_id: currentUser.id,
-    creator_name: currentUser.user_metadata?.full_name || 'Anonymous',
-    creator_bio: currentUser.user_metadata?.bio || '',
-    creator_pfp: currentUser.user_metadata?.pfp || null,
-    status: 'approved',
-    likes: 0,
-    views: 0,
-    created_at: new Date().toISOString()
-  };
-
-  try {
-    if (sb) {
-      const { data, error } = await sb.from('ideas').insert([payload]).select().single();
-      if (error) throw error;
-      allIdeas.unshift(data);
-    } else {
-      payload.id = Date.now().toString();
-      allIdeas.unshift(payload);
-      localStorage.setItem('innora_ideas', JSON.stringify(allIdeas));
+function quickSubmit() {
+  // Same flow as the "Submit an Idea" button on profile — no more direct posting.
+  if (!currentUser) {
+    showToast('Sign in to submit ideas', 'error');
+    showPage('login');
+    return;
+  }
+  const draft = document.getElementById('quick-submit')?.value.trim() || '';
+  openModal('submit-modal');
+  if (draft) {
+    // Carry over whatever they typed in the composer box into the description field.
+    const descEl = document.getElementById('idea-desc');
+    if (descEl) {
+      descEl.value = draft;
+      document.getElementById('desc-count').textContent = draft.length + ' / 1000';
     }
     document.getElementById('quick-submit').value = '';
-    updateStats();
-    renderFeed();
-    showToast('Idea shared directly! ✨', 'success');
-  } catch (e) {
-    showToast('Failed to post idea', 'error');
   }
 }
 
@@ -2249,11 +2387,23 @@ function renderFeed() {
   container.innerHTML = filtered.map(idea => postCardHTML(idea)).join('');
 }
 
-function postCardHTML(idea) {
+function statusLabelHTML(idea) {
+  // Public/approved ideas don't need a "approved" badge cluttering the card —
+  // that's the default expected state. Only call out non-default statuses.
+  if (idea.status === 'approved') return '';
+  const labels = { pending: 'Pending Review', needs_revision: 'Needs Revision' };
+  const cls = idea.status === 'needs_revision' ? 'status-revision' : `status-${idea.status}`;
+  return `<span class="post-status ${cls}">${escHtml(labels[idea.status] || idea.status)}</span>`;
+}
+
+function postCardHTML(idea, opts = {}) {
   const liked = likedIdeas.has(idea.id);
   const avatar = idea.creator_pfp ? `<img src="${idea.creator_pfp}" />` : getInitials(idea.creator_name);
   const ago = timeAgo(idea.created_at);
-  
+  const isOwn = currentUser && currentUser.id === idea.creator_id;
+  const showDelete = opts.showOwnerControls && isOwn;
+  const showResubmit = opts.showOwnerControls && isOwn && idea.status === 'needs_revision';
+
   return `
     <div class="post-card">
       <div class="post-header">
@@ -2262,14 +2412,17 @@ function postCardHTML(idea) {
           <div class="post-name" onclick="viewProfile('${idea.creator_id}')" style="cursor:pointer">${escHtml(idea.creator_name)}</div>
           <div style="font-size: 13px; color: var(--text-tertiary);">${ago}</div>
         </div>
+        ${showDelete ? `<button class="btn btn-danger" style="margin-left:auto; padding:6px 10px; font-size:12px;" onclick="deleteOwnIdea('${idea.id}', event)">🗑️ Delete</button>` : ''}
       </div>
       <div class="post-body" onclick="openDetail('${idea.id}')" style="cursor:pointer">
         <strong style="font-size: 16px;">${escHtml(idea.title)}</strong><br>
         ${escHtml(truncate(idea.description, 150))}
       </div>
+      ${idea.admin_feedback && idea.status === 'needs_revision' ? `<div class="form-error" style="margin: 8px 0;">📝 Feedback: ${escHtml(idea.admin_feedback)}</div>` : ''}
       <div>
         <span class="post-category">${escHtml(idea.category)}</span>
-        <span class="post-status status-${idea.status}">${escHtml(idea.status)}</span>
+        ${statusLabelHTML(idea)}
+        ${idea.has_suggestion && isOwn ? `<span class="post-status status-pending" style="cursor:pointer;" onclick="openDetail('${idea.id}')">💬 Suggestion Given</span>` : ''}
       </div>
       <div class="post-footer">
         <div class="post-action" onclick="likeIdea('${idea.id}')">
@@ -2277,6 +2430,8 @@ function postCardHTML(idea) {
         </div>
         <div class="post-action">💬 <span id="comments-${idea.id}">0</span></div>
         <div class="post-action">👁️ <span>${idea.views || 0}</span></div>
+        ${currentUser && !isOwn ? `<div class="post-action" onclick="reportIdea('${idea.id}', event)" title="Report">🚩</div>` : ''}
+        ${showResubmit ? `<button class="btn btn-primary" style="margin-left:auto; padding:6px 12px; font-size:13px;" onclick="openResubmitModal('${idea.id}', event)">✏️ Edit & Resubmit</button>` : ''}
       </div>
     </div>
   `;
@@ -2320,6 +2475,129 @@ async function likeIdea(id) {
   renderFeed();
 }
 
+async function deleteOwnIdea(id, evt) {
+  evt?.stopPropagation();
+  const idea = allIdeas.find(i => i.id === id);
+  if (!idea) return;
+  if (!currentUser || currentUser.id !== idea.creator_id) {
+    showToast("You can only delete your own posts", 'error');
+    return;
+  }
+  if (!confirm('Delete this idea? This cannot be undone.')) return;
+
+  try {
+    if (sb) {
+      const { error } = await sb.from('ideas').delete().eq('id', id);
+      if (error) throw error;
+    }
+    allIdeas = allIdeas.filter(i => i.id !== id);
+    if (!sb) localStorage.setItem('innora_ideas', JSON.stringify(allIdeas));
+    updateStats();
+    renderFeed();
+    if (document.getElementById('page-profile')?.classList.contains('active')) {
+      renderProfile(currentUser.id);
+    }
+    showToast('Idea deleted', 'success');
+  } catch (e) {
+    showToast('Failed to delete: ' + e.message, 'error');
+  }
+}
+
+function openResubmitModal(id, evt) {
+  evt?.stopPropagation();
+  const idea = allIdeas.find(i => i.id === id);
+  if (!idea) return;
+  if (!currentUser || currentUser.id !== idea.creator_id) return;
+
+  window.currentResubmitId = id;
+  document.getElementById('resubmit-title').value = idea.title;
+  document.getElementById('resubmit-category').value = idea.category;
+  document.getElementById('resubmit-desc').value = idea.description;
+  document.getElementById('resubmit-msg').innerHTML = '';
+  openModal('resubmit-modal');
+}
+
+async function resubmitIdea() {
+  const id = window.currentResubmitId;
+  const idea = allIdeas.find(i => i.id === id);
+  if (!idea) return;
+
+  const title = document.getElementById('resubmit-title').value.trim();
+  const category = document.getElementById('resubmit-category').value;
+  const desc = document.getElementById('resubmit-desc').value.trim();
+  const msg = document.getElementById('resubmit-msg');
+  const btn = document.getElementById('resubmit-btn');
+
+  msg.innerHTML = '';
+  if (!title) { msg.innerHTML = '<div class="form-error">Title required</div>'; return; }
+  if (!category) { msg.innerHTML = '<div class="form-error">Category required</div>'; return; }
+  if (desc.length < 20) { msg.innerHTML = '<div class="form-error">Min 20 characters</div>'; return; }
+
+  btn.disabled = true;
+  btn.textContent = 'Resubmitting...';
+
+  try {
+    const updates = { title, category, description: desc, status: 'pending', admin_feedback: null };
+    if (sb) {
+      const { error } = await sb.from('ideas').update(updates).eq('id', id);
+      if (error) throw error;
+    }
+    Object.assign(idea, updates);
+
+    closeModal('resubmit-modal');
+    updateStats();
+    renderFeed();
+    if (document.getElementById('page-profile')?.classList.contains('active')) {
+      renderProfile(currentUser.id);
+    }
+    showToast('Resubmitted for review! 📝', 'success');
+  } catch (e) {
+    msg.innerHTML = `<div class="form-error">${e.message}</div>`;
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Resubmit for Review →';
+  }
+}
+
+function reportIdea(id, evt) {
+  evt?.stopPropagation();
+  if (!currentUser) { showToast('Sign in to report posts', 'error'); showPage('login'); return; }
+  window.currentReportIdeaId = id;
+  document.getElementById('report-msg').innerHTML = '';
+  document.getElementById('report-reason').value = '';
+  openModal('report-modal');
+}
+
+async function sendReport() {
+  const id = window.currentReportIdeaId;
+  const reason = document.getElementById('report-reason').value.trim();
+  const msg = document.getElementById('report-msg');
+
+  if (!reason) { msg.innerHTML = '<div class="form-error">Tell us why you\'re reporting this</div>'; return; }
+
+  const idea = allIdeas.find(i => i.id === id);
+  if (!idea) { closeModal('report-modal'); return; }
+
+  const payload = {
+    idea_id: id,
+    idea_text: idea.title,
+    reason,
+    reporter_id: currentUser.id,
+    reporter_name: currentAccount?.full_name || currentUser.user_metadata?.full_name || 'Anonymous'
+  };
+
+  try {
+    if (sb) {
+      const { error } = await sb.from('reports').insert([payload]);
+      if (error) throw error;
+    }
+    closeModal('report-modal');
+    showToast('Report submitted — thanks for flagging this', 'success');
+  } catch (e) {
+    msg.innerHTML = `<div class="form-error">${e.message}</div>`;
+  }
+}
+
 // ─── PROFILE PAGE ───────────────────────────────────────────
 function viewOwnProfile() {
   if (!currentUser) { showPage('login'); return; }
@@ -2332,6 +2610,8 @@ async function handleLogout() {
   try {
     const { error } = await sb.auth.signOut();
     if (error) throw error;
+    currentUser = null;
+    currentAccount = null;
     showToast('Logged out successfully', 'success');
     showPage('home');
   } catch (err) {
@@ -2347,13 +2627,15 @@ function viewProfile(userId) {
 
 function renderProfile(userId) {
   const isOwn = currentUser?.id === userId;
-  const ideas = allIdeas.filter(i => i.creator_id === userId);
+  const ideas = allIdeas
+    .filter(i => i.creator_id === userId)
+    .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
   const totalLikes = ideas.reduce((s, i) => s + (i.likes || 0), 0);
 
   // For own profile, pull name/bio/pfp from auth metadata even if no ideas yet
   let name, bio, pfp;
   if (isOwn) {
-    name = currentUser.user_metadata?.full_name || currentUser.email?.split('@')[0] || 'User';
+    name = currentAccount?.full_name || currentUser.user_metadata?.full_name || currentUser.email?.split('@')[0] || 'User';
     bio  = currentUser.user_metadata?.bio || '';
     pfp  = currentUser.user_metadata?.pfp || null;
   } else {
@@ -2382,17 +2664,55 @@ function renderProfile(userId) {
     </div>
     ${isOwn ? `
       <div style="text-align:center; display: flex; justify-content: center; gap: 12px; margin-top: 16px;">
-        <button class="btn btn-primary" onclick="openModal('edit-profile-modal')">Edit Profile</button>
+        <button class="btn btn-primary" onclick="openEditProfileModal()">Edit Profile</button>
         <button class="btn btn-danger" onclick="handleLogout()">Log Out</button>
       </div>` : ''}
   `;
 
   document.getElementById('profile-posts').innerHTML = ideas.length
-    ? ideas.map(i => postCardHTML(i)).join('')
+    ? ideas.map(i => postCardHTML(i, { showOwnerControls: isOwn })).join('')
     : `<div class="empty-state"><div class="empty-icon">💡</div><div class="empty-title">No ideas shared yet</div><div class="empty-text">Share your first idea with the community!</div>${isOwn ? `<button class="btn btn-primary" onclick="submitIdeaCheckAuth()">Submit an Idea</button>` : ''}</div>`;
 }
 
 // ─── PROFILE EDITING ────────────────────────────────────────
+// Tracks whether the user explicitly hit "Remove Profile Picture" in this modal session.
+let pfpRemoveFlag = false;
+
+function openEditProfileModal() {
+  pfpRemoveFlag = false;
+  const bio = currentUser?.user_metadata?.bio || '';
+  const pfp = currentUser?.user_metadata?.pfp || null;
+
+  const bioInput = document.getElementById('bio-input');
+  bioInput.value = bio;
+  document.getElementById('bio-count').textContent = bio.length + ' / 150';
+
+  const preview = document.getElementById('pfp-preview');
+  const removeBtn = document.getElementById('remove-pfp-btn');
+  document.getElementById('pfp-input').value = '';
+
+  if (pfp) {
+    preview.src = pfp;
+    preview.classList.remove('hidden');
+    removeBtn.style.display = 'inline-flex';
+  } else {
+    preview.src = '';
+    preview.classList.add('hidden');
+    removeBtn.style.display = 'none';
+  }
+
+  document.getElementById('profile-msg').innerHTML = '';
+  openModal('edit-profile-modal');
+}
+
+function removePfp() {
+  pfpRemoveFlag = true;
+  document.getElementById('pfp-input').value = '';
+  document.getElementById('pfp-preview').classList.add('hidden');
+  document.getElementById('pfp-preview').src = '';
+  document.getElementById('remove-pfp-btn').style.display = 'none';
+}
+
 document.getElementById('upload-area')?.addEventListener('click', function() {
   document.getElementById('pfp-input').click();
 });
@@ -2401,11 +2721,13 @@ document.getElementById('pfp-input')?.addEventListener('change', function(e) {
   const file = e.target.files[0];
   if (!file) return;
 
+  pfpRemoveFlag = false; // picking a new file overrides any pending removal
   const reader = new FileReader();
   reader.onload = function(e) {
     const preview = document.getElementById('pfp-preview');
     preview.src = e.target.result;
     preview.classList.remove('hidden');
+    document.getElementById('remove-pfp-btn').style.display = 'inline-flex';
   };
   reader.readAsDataURL(file);
 });
@@ -2427,7 +2749,9 @@ async function updateProfile() {
   try {
     let pfpUrl = currentUser.user_metadata?.pfp || null;
 
-    if (pfpInput.files.length > 0) {
+    if (pfpRemoveFlag) {
+      pfpUrl = null;
+    } else if (pfpInput.files.length > 0) {
       const file = pfpInput.files[0];
       if (sb) {
         const fileName = `${currentUser.id}-${Date.now()}`;
@@ -2446,8 +2770,12 @@ async function updateProfile() {
     }
 
     currentUser.user_metadata = { ...currentUser.user_metadata, bio, pfp: pfpUrl };
+    pfpRemoveFlag = false;
     closeModal('edit-profile-modal');
     updateNavAuth();
+    if (document.getElementById('page-profile')?.classList.contains('active')) {
+      renderProfile(currentUser.id);
+    }
     showToast('Profile updated! ✨', 'success');
   } catch (e) {
     msg.innerHTML = `<div class="form-error">${e.message}</div>`;
@@ -2483,39 +2811,44 @@ function timeAgo(dateStr) {
 }
 
 // ─── LEADERBOARD ────────────────────────────────────────────
-function renderLeaderboard() {
+async function renderLeaderboard() {
   const container = document.getElementById('leaderboard-content');
   if (!container) return;
 
-  const creators = {};
-  allIdeas.forEach(idea => {
-    if (!creators[idea.creator_id]) {
-      creators[idea.creator_id] = {
-        name: idea.creator_name,
-        ideas: 0,
-        likes: 0,
-        pfp: idea.creator_pfp
-      };
+  container.innerHTML = '<div class="empty-state"><div class="empty-icon">⏳</div><div class="empty-title">Loading innovators...</div></div>';
+
+  let innovators = [];
+  try {
+    if (sb) {
+      const { data, error } = await sb.from('accounts').select('*').eq('role', 'innovator');
+      if (error) throw error;
+      innovators = data || [];
     }
-    creators[idea.creator_id].ideas++;
-    creators[idea.creator_id].likes += idea.likes || 0;
-  });
-
-  const sorted = Object.values(creators).sort((a, b) => b.likes - a.likes).slice(0, 10);
-
-  if (!sorted.length) {
-    container.innerHTML = '<div class="empty-state"><div class="empty-icon">✨</div><div class="empty-title">No innovators yet</div></div>';
+  } catch (e) {
+    console.warn('Load innovators failed', e);
+    container.innerHTML = '<div class="empty-state"><div class="empty-icon">⚠️</div><div class="empty-title">Could not load innovators</div></div>';
     return;
   }
 
-  container.innerHTML = sorted.map((creator, idx) => `
+  if (!innovators.length) {
+    container.innerHTML = '<div class="empty-state"><div class="empty-icon">✨</div><div class="empty-title">No innovators yet</div><div class="empty-text">Innovators are highlighted here by the admin team.</div></div>';
+    return;
+  }
+
+  const stats = innovators.map(acc => {
+    const ideas = allIdeas.filter(i => i.creator_id === acc.id && i.status === 'approved');
+    const likes = ideas.reduce((s, i) => s + (i.likes || 0), 0);
+    return { id: acc.id, name: acc.full_name || 'Unnamed', ideas: ideas.length, likes };
+  }).sort((a, b) => b.likes - a.likes);
+
+  container.innerHTML = stats.map((innovator, idx) => `
     <div class="stat-card">
       <div style="font-size: 24px; font-weight: 700; color: var(--primary); margin-bottom: 12px;">#${idx + 1}</div>
-      <div style="font-size: 18px; font-weight: 700; margin-bottom: 8px; color: var(--text);">${escHtml(creator.name)}</div>
+      <div style="font-size: 18px; font-weight: 700; margin-bottom: 8px; color: var(--text);">${escHtml(innovator.name)}</div>
       <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 16px;">
-        ${creator.ideas} ideas · ${creator.likes} likes
+        ${innovator.ideas} ideas · ${innovator.likes} likes
       </div>
-      <button class="btn btn-secondary" style="width: 100%;" onclick="viewProfile('${creator.name}')">View Profile</button>
+      <button class="btn btn-secondary" style="width: 100%;" onclick="viewProfile('${innovator.id}')">View Profile</button>
     </div>
   `).join('');
 }
@@ -2543,38 +2876,94 @@ async function openDetail(id) {
     </div>
 
     <span class="post-category" style="margin-bottom: 12px;">${escHtml(idea.category)}</span>
-    <span class="post-status status-${idea.status}">${escHtml(idea.status)}</span>
+    ${statusLabelHTML(idea)}
 
     <h2 style="font-size: 22px; font-weight: 700; margin: 20px 0;">${escHtml(idea.title)}</h2>
     <p style="font-size: 15px; line-height: 1.6; color: var(--text-secondary); margin-bottom: 20px;">${escHtml(idea.description)}</p>
+    ${idea.admin_feedback && idea.status === 'needs_revision' ? `<div class="form-error" style="margin-bottom: 20px;">📝 Admin feedback: ${escHtml(idea.admin_feedback)}</div>` : ''}
+    <div id="detail-suggestion-box"></div>
 
-    <div style="display: flex; gap: 12px; padding-top: 20px; border-top: 1px solid var(--border);">
+    <div style="display: flex; gap: 12px; padding-top: 20px; border-top: 1px solid var(--border); flex-wrap: wrap;">
       <button class="btn ${liked ? 'btn-primary' : 'btn-secondary'}" onclick="likeIdea('${id}')">
         ${liked ? '❤️' : '🤍'} ${idea.likes || 0} Likes
       </button>
       <button class="btn btn-secondary">💬 0 Comments</button>
-      ${isAdmin() ? `<button class="btn btn-danger" style="margin-left:auto;" onclick="suggestIdea('${id}')">💬 Send Suggestion</button>` : ''}
+      ${currentUser && currentUser.id !== idea.creator_id ? `<button class="btn btn-secondary" onclick="reportIdea('${id}', event)">🚩 Report</button>` : ''}
     </div>
   `;
 
   openModal('detail-modal');
+
+  // If this idea has a suggestion and the viewer is allowed to see it
+  // (the creator, or an admin), load and show it.
+  if (currentUser && (currentUser.id === idea.creator_id || isAdmin())) {
+    loadSuggestionForIdea(id);
+  }
 }
 
+async function loadSuggestionForIdea(ideaId) {
+  const box = document.getElementById('detail-suggestion-box');
+  if (!box || !sb) return;
+  try {
+    const { data, error } = await sb
+      .from('suggestions')
+      .select('*')
+      .eq('idea_id', ideaId)
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    if (error) throw error;
+    if (data) {
+      box.innerHTML = `<div class="form-success" style="margin-bottom: 20px;">💬 Suggestion: ${escHtml(data.message)}</div>`;
+    }
+  } catch (e) {
+    console.warn('Could not load suggestion', e);
+  }
+}
+
+// Suggestions are only sent from the Approve Ideas admin page now, scoped
+// to one pending idea — not as a generic "message any creator" tool.
 function suggestIdea(id) {
   window.currentSuggestionId = id;
+  document.getElementById('suggestion-msg').innerHTML = '';
+  document.getElementById('suggestion-input').value = '';
   openModal('suggestion-modal');
 }
 
 async function sendSuggestion() {
   const id = window.currentSuggestionId;
-  const suggestion = document.getElementById('suggestion-input').value.trim();
+  const message = document.getElementById('suggestion-input').value.trim();
   const msg = document.getElementById('suggestion-msg');
 
-  if (!suggestion) { msg.innerHTML = '<div class="form-error">Write a suggestion</div>'; return; }
+  if (!message) { msg.innerHTML = '<div class="form-error">Write a suggestion</div>'; return; }
 
-  msg.innerHTML = '<div class="form-success">Suggestion sent! 📬</div>';
-  document.getElementById('suggestion-input').value = '';
-  setTimeout(() => closeModal('suggestion-modal'), 1500);
+  const idea = allIdeas.find(i => i.id === id);
+  if (!idea) { closeModal('suggestion-modal'); return; }
+
+  const payload = {
+    idea_id: id,
+    creator_id: idea.creator_id,
+    message,
+    created_by: currentUser.id
+  };
+
+  try {
+    if (sb) {
+      // One suggestion per idea — replace any existing one for this idea.
+      await sb.from('suggestions').delete().eq('idea_id', id);
+      const { data, error } = await sb.from('suggestions').insert([payload]).select();
+      if (error) throw error;
+      if (!data || !data.length) throw new Error('Suggestion was not saved (0 rows affected).');
+    }
+    idea.has_suggestion = true;
+
+    msg.innerHTML = '<div class="form-success">Suggestion sent! 📬</div>';
+    document.getElementById('suggestion-input').value = '';
+    renderPendingIdeas();
+    setTimeout(() => closeModal('suggestion-modal'), 1200);
+  } catch (e) {
+    msg.innerHTML = `<div class="form-error">${e.message}</div>`;
+  }
 }
 
 // ─── ADMIN PANEL ────────────────────────────────────────────
@@ -2586,7 +2975,6 @@ function adminSection(section) {
     dashboard: 'admin-dashboard',
     reports: 'admin-reports-section',
     approve: 'admin-approve-section',
-    suggestions: 'admin-suggestions-section',
     news: 'admin-news-section',
     projects: 'admin-projects-section',
     accounts: 'admin-accounts-section'
@@ -2597,9 +2985,27 @@ function adminSection(section) {
 
   const navEl = document.querySelector(`[onclick="adminSection('${section}')"]`);
   if (navEl) navEl.classList.add('active');
+
+  // Lazy-load section data the first time it's opened.
+  if (section === 'news') renderAdminNews();
+  if (section === 'projects') renderAdminProjects();
+  if (section === 'accounts') loadAccountsList();
 }
 
-function loadAdminDashboard() {
+async function loadAdminDashboard() {
+  // Pull fresh ideas/reports/suggestions from Supabase every time the admin panel opens.
+  if (sb) {
+    try {
+      const { data, error } = await sb.from('ideas').select('*').order('created_at', { ascending: false });
+      if (error) throw error;
+      allIdeas = data || [];
+      await stampSuggestionFlags();
+    } catch (e) {
+      console.warn('Refreshing ideas for admin panel failed', e);
+    }
+  }
+  await loadReports();
+
   const total = allIdeas.length;
   const pending = allIdeas.filter(i => i.status === 'pending').length;
   const approved = allIdeas.filter(i => i.status === 'approved').length;
@@ -2610,7 +3016,6 @@ function loadAdminDashboard() {
 
   renderReports();
   renderPendingIdeas();
-  renderPendingCreators();
 
   // Show/hide role-gated admin sidebar items
   const canPost = isOperator() || isModerator();
@@ -2618,6 +3023,18 @@ function loadAdminDashboard() {
   setNav('admin-nav-news', canPost);
   setNav('admin-nav-projects', canPost);
   setNav('admin-nav-accounts', isOperator());
+}
+
+async function loadReports() {
+  if (!sb) { allReports = []; return; }
+  try {
+    const { data, error } = await sb.from('reports').select('*').order('created_at', { ascending: false });
+    if (error) throw error;
+    allReports = data || [];
+  } catch (e) {
+    console.warn('Load reports failed', e);
+    allReports = [];
+  }
 }
 
 function renderReports() {
@@ -2635,11 +3052,48 @@ function renderReports() {
       <div class="report-content">"${escHtml(truncate(report.idea_text, 150))}"</div>
       <div class="report-meta">Reported by ${escHtml(report.reporter_name)} • ${timeAgo(report.created_at)}</div>
       <div class="report-actions">
-        <button class="btn btn-danger" onclick="removeIdea('${report.idea_id}')">🗑️ Remove Post</button>
-        <button class="btn btn-secondary" onclick="approveIdea('${report.idea_id}')">✅ Keep Post</button>
+        <button class="btn btn-danger" onclick="removeIdea('${report.idea_id}', '${report.id}')">🗑️ Remove Post</button>
+        <button class="btn btn-secondary" onclick="dismissReport('${report.id}')">✅ Keep Post</button>
       </div>
     </div>
   `).join('');
+}
+
+async function dismissReport(reportId) {
+  try {
+    if (sb) {
+      const { error } = await sb.from('reports').delete().eq('id', reportId);
+      if (error) throw error;
+    }
+    allReports = allReports.filter(r => r.id !== reportId);
+    setText('admin-reports', allReports.length);
+    renderReports();
+    showToast('Report dismissed, post kept up', 'success');
+  } catch (e) {
+    showToast('Failed to dismiss report: ' + e.message, 'error');
+  }
+}
+
+async function removeIdea(ideaId, reportId) {
+  if (!confirm('Remove this idea permanently?')) return;
+  try {
+    if (sb) {
+      const { error } = await sb.from('ideas').delete().eq('id', ideaId);
+      if (error) throw error;
+      // Clear out any reports tied to this idea, including the one passed in.
+      await sb.from('reports').delete().eq('idea_id', ideaId);
+    }
+    allIdeas = allIdeas.filter(i => i.id !== ideaId);
+    allReports = allReports.filter(r => r.idea_id !== ideaId);
+    setText('admin-reports', allReports.length);
+    renderReports();
+    renderPendingIdeas();
+    updateStats();
+    renderFeed();
+    showToast('Idea removed', 'success');
+  } catch (e) {
+    showToast('Failed to remove idea: ' + e.message, 'error');
+  }
 }
 
 function renderPendingIdeas() {
@@ -2648,64 +3102,409 @@ function renderPendingIdeas() {
 
   const pending = allIdeas.filter(i => i.status === 'pending');
   if (!pending.length) {
-    container.innerHTML = '<div class="empty-state"><div class="empty-icon">✨</div><div class="empty-title">All ideas approved</div></div>';
+    container.innerHTML = '<div class="empty-state"><div class="empty-icon">✨</div><div class="empty-title">All caught up — nothing pending</div></div>';
     return;
   }
 
   container.innerHTML = pending.map(idea => `
     <div class="post-card">
       <div class="post-name">${escHtml(idea.creator_name)}</div>
-      <div class="post-body" style="margin: 12px 0;">${escHtml(idea.title)}</div>
+      <div style="font-size: 13px; color: var(--text-tertiary); margin-bottom: 8px;">${escHtml(idea.category)} • ${timeAgo(idea.created_at)}</div>
+      <div class="post-body" style="margin: 12px 0; cursor: default;"><strong>${escHtml(idea.title)}</strong><br>${escHtml(idea.description)}</div>
+      ${idea.has_suggestion ? `<span class="post-status status-pending">💬 Suggestion Given</span>` : ''}
       <div class="post-footer">
         <button class="btn btn-primary" onclick="approveIdea('${idea.id}')">✅ Approve</button>
+        <button class="btn btn-secondary" onclick="openFeedbackPrompt('${idea.id}')">📝 Request Changes</button>
+        <button class="btn btn-secondary" onclick="suggestIdea('${idea.id}')">💬 ${idea.has_suggestion ? 'Edit Suggestion' : 'Send Suggestion'}</button>
         <button class="btn btn-danger" onclick="removeIdea('${idea.id}')">🗑️ Reject</button>
       </div>
     </div>
   `).join('');
 }
 
-function renderPendingCreators() {
-  const container = document.getElementById('pending-creators-list');
-  if (!container) return;
-
-  const creators = [...new Set(allIdeas.map(i => i.creator_id))].map(id => {
-    const ideas = allIdeas.filter(i => i.creator_id === id);
-    return { id, name: ideas[0].creator_name, ideas: ideas.length };
-  });
-
-  if (!creators.length) {
-    container.innerHTML = '<div class="empty-state"><div class="empty-icon">✨</div><div class="empty-title">No creators</div></div>';
-    return;
-  }
-
-  container.innerHTML = creators.map(creator => `
-    <div class="post-card">
-      <div class="post-name">${escHtml(creator.name)}</div>
-      <div style="font-size: 13px; color: var(--text-secondary); margin: 8px 0;">${creator.ideas} ideas</div>
-      <button class="btn btn-primary" onclick="suggestToCreator('${creator.id}')">💬 Send Suggestion</button>
-    </div>
-  `).join('');
+function openFeedbackPrompt(id) {
+  window.currentFeedbackIdeaId = id;
+  document.getElementById('feedback-msg').innerHTML = '';
+  document.getElementById('feedback-input').value = '';
+  openModal('feedback-modal');
 }
 
-function suggestToCreator(creatorId) {
-  window.currentSuggestionCreator = creatorId;
-  openModal('suggestion-modal');
+async function sendFeedback() {
+  const id = window.currentFeedbackIdeaId;
+  const feedback = document.getElementById('feedback-input').value.trim();
+  const msg = document.getElementById('feedback-msg');
+
+  if (!feedback) { msg.innerHTML = '<div class="form-error">Write feedback for the creator</div>'; return; }
+
+  try {
+    if (sb) {
+      const { data, error } = await sb
+        .from('ideas')
+        .update({ status: 'needs_revision', admin_feedback: feedback })
+        .eq('id', id)
+        .select();
+      if (error) throw error;
+      if (!data || !data.length) throw new Error('No matching idea was updated (0 rows affected).');
+    }
+    const idea = allIdeas.find(i => i.id === id);
+    if (idea) { idea.status = 'needs_revision'; idea.admin_feedback = feedback; }
+
+    closeModal('feedback-modal');
+    renderPendingIdeas();
+    updateStats();
+    renderFeed();
+    showToast('Feedback sent — creator can edit and resubmit', 'success');
+  } catch (e) {
+    msg.innerHTML = `<div class="form-error">${e.message}</div>`;
+  }
 }
 
 async function approveIdea(id) {
   const idea = allIdeas.find(i => i.id === id);
   if (!idea) return;
-  idea.status = 'approved';
-  
-  if (sb) {
-    await sb.from('ideas').update({ status: 'approved' }).eq('id', id);
-  } else {
-    localStorage.setItem('innora_ideas', JSON.stringify(allIdeas));
+
+  try {
+    if (sb) {
+      const { data, error } = await sb
+        .from('ideas')
+        .update({ status: 'approved', admin_feedback: null })
+        .eq('id', id)
+        .select();
+
+      if (error) throw error;
+      if (!data || !data.length) {
+        // The update ran with no error but matched zero rows — this is the
+        // silent-failure case (RLS, wrong id, etc). Surface it instead of
+        // pretending it worked.
+        throw new Error('No matching idea was updated in Supabase (0 rows affected). Check the id and table permissions.');
+      }
+    }
+
+    idea.status = 'approved';
+    idea.admin_feedback = null;
+
+    setText('admin-approved', allIdeas.filter(i => i.status === 'approved').length);
+    renderPendingIdeas();
+    renderFeed();
+    showToast('Idea approved!', 'success');
+  } catch (e) {
+    console.error('approveIdea failed', e);
+    showToast('Approve failed: ' + e.message, 'error');
   }
-  
-  loadAdminDashboard();
-  renderFeed();
-  showToast('Idea approved!', 'success');
+}
+
+// ─── NEWS ───────────────────────────────────────────────────
+async function loadNews() {
+  try {
+    if (sb) {
+      const { data, error } = await sb.from('news').select('*').order('created_at', { ascending: false });
+      if (error) throw error;
+      allNews = data || [];
+    }
+  } catch (e) {
+    console.warn('Load news failed', e);
+    allNews = [];
+  }
+  renderNewsFeed();
+}
+
+function renderNewsFeed() {
+  const container = document.getElementById('news-feed');
+  if (!container) return;
+
+  if (!allNews.length) {
+    container.innerHTML = '<div class="empty-state"><div class="empty-icon">📰</div><div class="empty-title">No news yet</div><div class="empty-text">Check back soon for updates.</div></div>';
+    return;
+  }
+
+  container.innerHTML = allNews.map(n => `
+    <div class="post-card">
+      <div class="post-header">
+        <div class="post-meta">
+          <div class="post-name">${escHtml(n.title)}</div>
+          <div style="font-size: 13px; color: var(--text-tertiary);">${escHtml(n.author_name || 'INNORA Team')} • ${timeAgo(n.created_at)}</div>
+        </div>
+      </div>
+      <div>
+        <span class="post-category">${escHtml(n.category)}</span>
+      </div>
+      <div class="post-body" style="cursor:default; margin-top: 10px;">${escHtml(n.content)}</div>
+      ${isOperator() ? `<div class="post-footer"><button class="btn btn-danger" onclick="deleteNews('${n.id}')">🗑️ Delete</button></div>` : ''}
+    </div>
+  `).join('');
+}
+
+async function submitNews() {
+  const title = document.getElementById('news-title').value.trim();
+  const category = document.getElementById('news-category').value;
+  const content = document.getElementById('news-body').value.trim();
+  const msg = document.getElementById('news-submit-msg');
+  const btn = document.getElementById('news-submit-btn');
+
+  msg.innerHTML = '';
+  if (!title) { msg.innerHTML = '<div class="form-error">Title required</div>'; return; }
+  if (!category) { msg.innerHTML = '<div class="form-error">Category required</div>'; return; }
+  if (!content) { msg.innerHTML = '<div class="form-error">Content required</div>'; return; }
+
+  btn.disabled = true;
+  btn.textContent = 'Publishing...';
+
+  const payload = {
+    title,
+    category,
+    content,
+    author_id: currentUser.id,
+    author_name: currentAccount?.full_name || currentUser.user_metadata?.full_name || 'INNORA Team'
+  };
+
+  try {
+    if (sb) {
+      const { data, error } = await sb.from('news').insert([payload]).select().single();
+      if (error) throw error;
+      allNews.unshift(data);
+    }
+    closeModal('add-news-modal');
+    document.getElementById('news-title').value = '';
+    document.getElementById('news-category').value = '';
+    document.getElementById('news-body').value = '';
+    renderNewsFeed();
+    renderAdminNews();
+    showToast('News published! 📰', 'success');
+  } catch (e) {
+    msg.innerHTML = `<div class="form-error">${e.message}</div>`;
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Publish →';
+  }
+}
+
+function renderAdminNews() {
+  const container = document.getElementById('admin-news-list');
+  if (!container) return;
+  if (!allNews.length) {
+    container.innerHTML = '<div class="empty-state"><div class="empty-icon">📰</div><div class="empty-title">No news posted yet</div></div>';
+    return;
+  }
+  container.innerHTML = allNews.map(n => `
+    <div class="post-card">
+      <div class="post-name">${escHtml(n.title)}</div>
+      <div style="font-size: 13px; color: var(--text-tertiary); margin: 6px 0;">${escHtml(n.category)} • ${timeAgo(n.created_at)}</div>
+      <div class="post-footer">
+        <button class="btn btn-danger" onclick="deleteNews('${n.id}')">🗑️ Delete</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+async function deleteNews(id) {
+  if (!confirm('Delete this news post?')) return;
+  try {
+    if (sb) {
+      const { error } = await sb.from('news').delete().eq('id', id);
+      if (error) throw error;
+    }
+    allNews = allNews.filter(n => n.id !== id);
+    renderNewsFeed();
+    renderAdminNews();
+    showToast('News post deleted', 'success');
+  } catch (e) {
+    showToast('Failed to delete: ' + e.message, 'error');
+  }
+}
+
+// ─── PROJECTS ───────────────────────────────────────────────
+async function loadProjects() {
+  try {
+    if (sb) {
+      const { data, error } = await sb.from('projects').select('*').order('created_at', { ascending: false });
+      if (error) throw error;
+      allProjects = data || [];
+    }
+  } catch (e) {
+    console.warn('Load projects failed', e);
+    allProjects = [];
+  }
+  renderProjectsFeed();
+}
+
+function renderProjectsFeed() {
+  const container = document.getElementById('projects-feed');
+  if (!container) return;
+
+  if (!allProjects.length) {
+    container.innerHTML = '<div class="empty-state"><div class="empty-icon">🚀</div><div class="empty-title">No projects yet</div><div class="empty-text">Official projects will show up here.</div></div>';
+    return;
+  }
+
+  container.innerHTML = allProjects.map(p => `
+    <div class="post-card">
+      <div class="post-header">
+        <div class="post-meta">
+          <div class="post-name">${escHtml(p.name)}</div>
+          <div style="font-size: 13px; color: var(--text-tertiary);">${escHtml(p.team || 'INNORA Team')} • ${timeAgo(p.created_at)}</div>
+        </div>
+      </div>
+      <div><span class="post-category">${escHtml(p.category)}</span></div>
+      <div class="post-body" style="cursor:default; margin-top: 10px;">${escHtml(p.description)}</div>
+      ${isOperator() ? `<div class="post-footer"><button class="btn btn-danger" onclick="deleteProject('${p.id}')">🗑️ Delete</button></div>` : ''}
+    </div>
+  `).join('');
+}
+
+async function submitProject() {
+  const name = document.getElementById('project-name').value.trim();
+  const category = document.getElementById('project-category').value;
+  const description = document.getElementById('project-desc').value.trim();
+  const team = document.getElementById('project-team').value.trim();
+  const msg = document.getElementById('project-submit-msg');
+  const btn = document.getElementById('project-submit-btn');
+
+  msg.innerHTML = '';
+  if (!name) { msg.innerHTML = '<div class="form-error">Project name required</div>'; return; }
+  if (!category) { msg.innerHTML = '<div class="form-error">Category required</div>'; return; }
+  if (!description) { msg.innerHTML = '<div class="form-error">Description required</div>'; return; }
+
+  btn.disabled = true;
+  btn.textContent = 'Creating...';
+
+  const payload = {
+    name,
+    category,
+    description,
+    team: team || null,
+    created_by: currentUser.id
+  };
+
+  try {
+    if (sb) {
+      const { data, error } = await sb.from('projects').insert([payload]).select().single();
+      if (error) throw error;
+      allProjects.unshift(data);
+    }
+    closeModal('add-project-modal');
+    document.getElementById('project-name').value = '';
+    document.getElementById('project-category').value = '';
+    document.getElementById('project-desc').value = '';
+    document.getElementById('project-team').value = '';
+    renderProjectsFeed();
+    renderAdminProjects();
+    showToast('Project added! 🚀', 'success');
+  } catch (e) {
+    msg.innerHTML = `<div class="form-error">${e.message}</div>`;
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Create Project →';
+  }
+}
+
+function renderAdminProjects() {
+  const container = document.getElementById('admin-projects-list');
+  if (!container) return;
+  if (!allProjects.length) {
+    container.innerHTML = '<div class="empty-state"><div class="empty-icon">🚀</div><div class="empty-title">No projects yet</div></div>';
+    return;
+  }
+  container.innerHTML = allProjects.map(p => `
+    <div class="post-card">
+      <div class="post-name">${escHtml(p.name)}</div>
+      <div style="font-size: 13px; color: var(--text-tertiary); margin: 6px 0;">${escHtml(p.category)} • ${timeAgo(p.created_at)}</div>
+      <div class="post-footer">
+        <button class="btn btn-danger" onclick="deleteProject('${p.id}')">🗑️ Delete</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+async function deleteProject(id) {
+  if (!confirm('Delete this project?')) return;
+  try {
+    if (sb) {
+      const { error } = await sb.from('projects').delete().eq('id', id);
+      if (error) throw error;
+    }
+    allProjects = allProjects.filter(p => p.id !== id);
+    renderProjectsFeed();
+    renderAdminProjects();
+    showToast('Project deleted', 'success');
+  } catch (e) {
+    showToast('Failed to delete: ' + e.message, 'error');
+  }
+}
+
+// ─── ACCOUNTS MANAGEMENT (operator only) ───────────────────
+async function loadAccountsList() {
+  if (!isOperator()) return;
+  try {
+    if (sb) {
+      const { data, error } = await sb.from('accounts').select('*').order('created_at', { ascending: true });
+      if (error) throw error;
+      allAccounts = data || [];
+    }
+  } catch (e) {
+    console.warn('Load accounts failed', e);
+    allAccounts = [];
+    showToast('Failed to load accounts: ' + e.message, 'error');
+  }
+  renderAccountsList();
+}
+
+function renderAccountsList() {
+  const tbody = document.getElementById('accounts-list');
+  if (!tbody) return;
+
+  if (!allAccounts.length) {
+    tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding: 24px;">No accounts found</td></tr>`;
+    return;
+  }
+
+  const roles = ['member', 'moderator', 'operator', 'admin'];
+
+  tbody.innerHTML = allAccounts.map(acc => `
+    <tr>
+      <td>${escHtml(acc.full_name || '—')}</td>
+      <td>${escHtml(acc.email || '—')}</td>
+      <td><span class="post-status status-${acc.role === 'member' ? 'pending' : 'approved'}" style="margin-left:0;">${escHtml(acc.role)}</span></td>
+      <td>
+        <select class="form-select" style="padding: 6px 10px; font-size: 13px;" onchange="changeAccountRole('${acc.id}', this.value)">
+          ${roles.map(r => `<option value="${r}" ${acc.role === r ? 'selected' : ''}>${r}</option>`).join('')}
+        </select>
+      </td>
+    </tr>
+  `).join('');
+}
+
+async function changeAccountRole(accountId, newRole) {
+  if (!isOperator()) { showToast('Only operators can change roles', 'error'); return; }
+  if (accountId === currentUser.id && newRole !== 'operator' && newRole !== 'admin') {
+    if (!confirm("You're about to lower your own access level. Continue?")) {
+      loadAccountsList();
+      return;
+    }
+  }
+
+  try {
+    if (sb) {
+      const { data, error } = await sb
+        .from('accounts')
+        .update({ role: newRole })
+        .eq('id', accountId)
+        .select();
+      if (error) throw error;
+      if (!data || !data.length) throw new Error('No matching account was updated (0 rows affected).');
+    }
+    const acc = allAccounts.find(a => a.id === accountId);
+    if (acc) acc.role = newRole;
+    if (accountId === currentUser.id && currentAccount) {
+      currentAccount.role = newRole;
+      updateNavAuth();
+      loadAdminDashboard();
+    }
+    renderAccountsList();
+    showToast('Role updated', 'success');
+  } catch (e) {
+    showToast('Failed to update role: ' + e.message, 'error');
+    loadAccountsList();
+  }
 }
 </script>
 </body>
