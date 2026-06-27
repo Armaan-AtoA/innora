@@ -1345,6 +1345,244 @@ h1, h2, h3, h4, h5 { font-family: 'Poppins', sans-serif; font-weight: 700; }
   align-items: center;
   margin-bottom: 8px;
 }
+
+/* INNOVATOR BADGE */
+.role-innovator { background: rgba(139,92,246,0.2); color: #7c3aed; }
+
+/* HOME SPLIT GRID */
+@media (max-width: 768px) {
+  .home-split-grid { grid-template-columns: 1fr !important; }
+}
+
+/* COUNTDOWN */
+.countdown-wrap {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin: 16px 0;
+  flex-wrap: wrap;
+}
+.countdown-block {
+  text-align: center;
+  background: rgba(90,156,122,0.08);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 16px;
+  min-width: 60px;
+}
+.countdown-num {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--primary-dark);
+  line-height: 1;
+}
+.countdown-label {
+  font-size: 11px;
+  color: var(--text-tertiary);
+  margin-top: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.home-project-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--r-card);
+  padding: 22px;
+  transition: all 0.3s;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+  cursor: pointer;
+}
+.home-project-card:hover {
+  border-color: var(--primary-light);
+  box-shadow: var(--shadow);
+  transform: translateY(-3px);
+}
+.home-news-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--r-card);
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+}
+.home-news-card:hover { border-color: var(--primary-light); box-shadow: var(--shadow); }
+.home-news-img { width: 100%; height: 160px; object-fit: cover; display: block; background: var(--bg-tertiary); }
+.home-news-body { padding: 18px; }
+.home-challenge-card {
+  background: linear-gradient(135deg, rgba(90,156,122,0.08), rgba(139,204,193,0.08));
+  border: 1px solid var(--primary-light);
+  border-radius: var(--r-card);
+  padding: 22px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+}
+
+/* HAMBURGER MENU */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  padding: 8px;
+  border: none;
+  background: none;
+}
+.hamburger span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: var(--text);
+  border-radius: 2px;
+  transition: all 0.3s;
+}
+.mobile-menu {
+  display: none;
+  position: fixed;
+  top: 70px;
+  left: 0;
+  width: 100%;
+  background: rgba(244,249,246,0.97);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  z-index: 99;
+  padding: 12px 20px 20px;
+  flex-direction: column;
+  gap: 4px;
+  animation: slideDown 0.2s ease-out;
+}
+.mobile-menu.open { display: flex; }
+.mobile-menu .nav-link { width: 100%; text-align: left; font-size: 15px; padding: 12px 16px; }
+@keyframes slideDown { from { opacity:0; transform:translateY(-10px); } to { opacity:1; transform:translateY(0); } }
+
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .hamburger { display: flex; }
+  .admin-layout { grid-template-columns: 1fr; }
+  .admin-sidebar { position: static; }
+  .login-container { grid-template-columns: 1fr; gap: 24px; }
+  .login-left { display: none; }
+  .hero-h1 { font-size: 36px; }
+  .hero { padding: 40px 20px; }
+  .profile-stats { gap: 20px; }
+  .news-layout { grid-template-columns: 1fr !important; }
+}
+
+/* NEWS FULLSCREEN PAGE */
+#page-news-compose {
+  padding-top: 70px;
+  min-height: 100vh;
+  animation: pageIn 0.4s ease-out;
+}
+.news-compose-wrap {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 40px 40px;
+}
+@media (max-width: 640px) { .news-compose-wrap { padding: 20px; } }
+
+/* NEWS HEADLINE LIST */
+.news-list-item {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--r-card);
+  padding: 20px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+}
+.news-list-item:hover { border-color: var(--primary-light); box-shadow: var(--shadow); }
+.news-list-thumb {
+  width: 90px;
+  height: 70px;
+  border-radius: 10px;
+  object-fit: cover;
+  flex-shrink: 0;
+  background: var(--bg-tertiary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  overflow: hidden;
+}
+.news-list-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.news-list-info { flex: 1; min-width: 0; }
+.news-list-title { font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.news-list-meta { font-size: 12px; color: var(--text-tertiary); margin-bottom: 6px; }
+.news-list-excerpt { font-size: 13px; color: var(--text-secondary); line-height: 1.5;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* NEWS DETAIL OVERLAY */
+.news-detail-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(28,43,35,0.5);
+  backdrop-filter: blur(6px);
+  z-index: 300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+.news-detail-overlay.open { opacity: 1; pointer-events: all; }
+.news-detail-box {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--r-card);
+  max-width: 680px;
+  width: 100%;
+  max-height: 88vh;
+  overflow-y: auto;
+  animation: modalSlide 0.3s ease-out;
+  box-shadow: var(--shadow-lg);
+}
+.news-detail-img { width: 100%; height: 260px; object-fit: cover; border-radius: var(--r-card) var(--r-card) 0 0; display: block; }
+.news-detail-body { padding: 28px; }
+
+/* CHALLENGE CARDS */
+.challenge-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--r-card);
+  padding: 24px;
+  margin-bottom: 16px;
+  transition: all 0.3s;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+}
+.challenge-card:hover { border-color: var(--primary-light); box-shadow: var(--shadow); }
+.challenge-deadline {
+  display: inline-block;
+  background: rgba(239,68,68,0.1);
+  color: var(--danger);
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+.challenge-deadline.soon { background: rgba(245,158,11,0.15); color: var(--accent); }
+.challenge-deadline.active { background: rgba(34,197,94,0.15); color: #16a34a; }
+
+/* FILE UPLOAD ZONE */
+.file-upload-zone {
+  border: 2px dashed var(--border);
+  border-radius: var(--r-card);
+  padding: 24px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s;
+  background: var(--bg-tertiary);
+}
+.file-upload-zone:hover { border-color: var(--primary); background: rgba(90,156,122,0.05); }
+.file-upload-zone input[type="file"] { display: none; }
+.file-chosen { font-size: 13px; color: var(--primary-dark); margin-top: 8px; font-weight: 500; }
 </style>
 </head>
 <body>
@@ -1364,6 +1602,8 @@ h1, h2, h3, h4, h5 { font-family: 'Poppins', sans-serif; font-weight: 700; }
       <button class="nav-link" onclick="showPage('feed')">Ideas</button>
       <button class="nav-link" onclick="showPage('news')">News</button>
       <button class="nav-link" onclick="showPage('projects')">Projects</button>
+      <button class="nav-link" onclick="showPage('challenges')">Challenges</button>
+      <button class="nav-link" id="nav-submissions-link" style="display:none" onclick="showPage('submissions')">Submissions</button>
       <button class="nav-link" onclick="showPage('leaderboard')">Innovators</button>
       <button class="nav-link" id="nav-admin-link" style="display:none" onclick="showPage('admin')">Admin Panel</button>
     </div>
@@ -1371,7 +1611,24 @@ h1, h2, h3, h4, h5 { font-family: 'Poppins', sans-serif; font-weight: 700; }
   <div class="nav-right" id="nav-auth-area">
     <button class="btn btn-primary" onclick="showPage('login')">Sign In</button>
   </div>
+  <button class="hamburger" onclick="toggleMobileMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobile-menu">
+  <button class="nav-link" onclick="mobileNav('home')">🏠 Home</button>
+  <button class="nav-link" onclick="mobileNav('feed')">💡 Ideas</button>
+  <button class="nav-link" onclick="mobileNav('news')">📰 News</button>
+  <button class="nav-link" onclick="mobileNav('projects')">🚀 Projects</button>
+  <button class="nav-link" onclick="mobileNav('challenges')">🏆 Challenges</button>
+  <button class="nav-link" id="mob-submissions-link" style="display:none" onclick="mobileNav('submissions')">📋 Submissions</button>
+  <button class="nav-link" onclick="mobileNav('leaderboard')">⭐ Innovators</button>
+  <button class="nav-link" id="mob-admin-link" style="display:none" onclick="mobileNav('admin')">⚙️ Admin Panel</button>
+  <hr style="border:none;border-top:1px solid var(--border);margin:8px 0;">
+  <div id="mobile-auth-area"></div>
+</div>
 
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
@@ -1545,33 +1802,11 @@ h1, h2, h3, h4, h5 { font-family: 'Poppins', sans-serif; font-weight: 700; }
   </div>
 </div>
 
-<!-- ADD NEWS MODAL -->
-<div class="modal-overlay" id="add-news-modal">
-  <div class="modal">
-    <button class="modal-close" onclick="closeModal('add-news-modal')">✕</button>
-    <div class="modal-title">Post News</div>
-    <div class="modal-sub">Publish a news post to the platform.</div>
-    <div class="form-group">
-      <label class="form-label">Title *</label>
-      <input type="text" class="form-input" id="news-title" placeholder="News headline" maxlength="120">
-    </div>
-    <div class="form-group">
-      <label class="form-label">Category *</label>
-      <select class="form-select" id="news-category">
-        <option value="">Select a category</option>
-        <option>Announcement</option>
-        <option>Event</option>
-        <option>Achievement</option>
-        <option>Update</option>
-        <option>Other</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label class="form-label">Content *</label>
-      <textarea class="form-textarea" id="news-body" placeholder="Write the news content..." maxlength="2000"></textarea>
-    </div>
-    <div id="news-submit-msg"></div>
-    <button class="form-submit" id="news-submit-btn" onclick="submitNews()">Publish →</button>
+<!-- NEWS DETAIL OVERLAY -->
+<div class="news-detail-overlay" id="news-detail-overlay">
+  <div class="news-detail-box">
+    <button class="modal-close" style="position:absolute;top:16px;right:16px;z-index:1;" onclick="closeNewsDetail()">✕</button>
+    <div id="news-detail-content"></div>
   </div>
 </div>
 
@@ -1606,6 +1841,15 @@ h1, h2, h3, h4, h5 { font-family: 'Poppins', sans-serif; font-weight: 700; }
     <div class="form-group">
       <label class="form-label">Team / Author</label>
       <input type="text" class="form-input" id="project-team" placeholder="Team or author name" maxlength="100">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Attach File (optional)</label>
+      <div class="file-upload-zone" id="project-file-zone" onclick="document.getElementById('project-file-input').click()">
+        <div style="font-size:28px; margin-bottom:8px;">📎</div>
+        <input type="file" id="project-file-input">
+        <div class="upload-text">Click to upload any file (PDF, ZIP, DOCX…)</div>
+        <div class="file-chosen" id="project-file-chosen" style="display:none"></div>
+      </div>
     </div>
     <div id="project-submit-msg"></div>
     <button class="form-submit" id="project-submit-btn" onclick="submitProject()">Create Project →</button>
@@ -1644,6 +1888,51 @@ h1, h2, h3, h4, h5 { font-family: 'Poppins', sans-serif; font-weight: 700; }
           <div class="stat-num" id="stat-likes">0</div>
           <div class="stat-label">Total Engagement</div>
         </div>
+      </div>
+    </div>
+
+    <!-- FEATURED PROJECTS -->
+    <div class="section" style="padding-top:0;">
+      <div class="section-header-row" style="margin-bottom:24px;">
+        <div>
+          <h2 class="section-title">Featured Projects</h2>
+          <p class="section-sub" style="margin-bottom:0;">The latest official projects from the INNORA team.</p>
+        </div>
+        <button class="btn btn-secondary" onclick="showPage('projects')">View All →</button>
+      </div>
+      <div class="grid-3" id="home-projects">
+        <div class="skeleton" style="height:160px;"></div>
+        <div class="skeleton" style="height:160px;"></div>
+        <div class="skeleton" style="height:160px;"></div>
+      </div>
+    </div>
+
+    <!-- LATEST NEWS + ACTIVE CHALLENGE -->
+    <div class="section" style="padding-top:0;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;" class="home-split-grid">
+
+        <!-- LATEST NEWS -->
+        <div>
+          <div class="section-header-row" style="margin-bottom:16px;">
+            <h2 class="section-title" style="font-size:24px;">Latest News</h2>
+            <button class="btn btn-secondary" style="padding:8px 14px;font-size:13px;" onclick="showPage('news')">All News →</button>
+          </div>
+          <div id="home-news">
+            <div class="skeleton" style="height:120px;"></div>
+          </div>
+        </div>
+
+        <!-- ACTIVE CHALLENGE -->
+        <div>
+          <div class="section-header-row" style="margin-bottom:16px;">
+            <h2 class="section-title" style="font-size:24px;">Active Challenge</h2>
+            <button class="btn btn-secondary" style="padding:8px 14px;font-size:13px;" onclick="showPage('challenges')">All Challenges →</button>
+          </div>
+          <div id="home-challenge">
+            <div class="skeleton" style="height:120px;"></div>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
@@ -1697,18 +1986,18 @@ h1, h2, h3, h4, h5 { font-family: 'Poppins', sans-serif; font-weight: 700; }
   </div>
 </div>
 
-<!-- LEADERBOARD PAGE -->
+<!-- LEADERBOARD / INNOVATORS PAGE -->
 <div id="page-leaderboard" class="page z1">
   <div class="container">
     <div class="section">
-      <h2 class="section-title">Top Innovators</h2>
-      <p class="section-sub">Celebrating the most active contributors to our community.</p>
+      <h2 class="section-title">Innovators</h2>
+      <p class="section-sub">Students recognized as Innovators on the INNORA platform.</p>
       <div class="grid-2" id="leaderboard-content"></div>
     </div>
   </div>
 </div>
 
-<!-- NEWS PAGE -->
+<!-- NEWS PAGE (headline list) -->
 <div id="page-news" class="page z1">
   <div class="container">
     <div class="section">
@@ -1717,9 +2006,73 @@ h1, h2, h3, h4, h5 { font-family: 'Poppins', sans-serif; font-weight: 700; }
           <h2 class="section-title">Latest News</h2>
           <p class="section-sub">Stay up to date with INNORA announcements and events.</p>
         </div>
-        <button class="btn btn-primary" id="nav-add-news-btn" style="display:none" onclick="openModal('add-news-modal')">+ Post News</button>
+        <button class="btn btn-primary" id="nav-add-news-btn" style="display:none" onclick="showPage('news-compose')">+ Post News</button>
       </div>
       <div id="news-feed"></div>
+    </div>
+  </div>
+</div>
+
+<!-- NEWS COMPOSE FULLSCREEN PAGE -->
+<div id="page-news-compose" class="page z1">
+  <div class="news-compose-wrap">
+    <div style="display:flex; align-items:center; gap:16px; margin-bottom:32px;">
+      <button class="btn btn-secondary" onclick="showPage('news')">← Back</button>
+      <h2 class="section-title" style="margin:0;">Post News</h2>
+    </div>
+    <div style="background:var(--bg-secondary);border:1px solid var(--border);border-radius:var(--r-card);padding:32px;box-shadow:var(--shadow);">
+      <div class="form-group">
+        <label class="form-label">Headline *</label>
+        <input type="text" class="form-input" id="news-title" placeholder="News headline" maxlength="120">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Category *</label>
+        <select class="form-select" id="news-category">
+          <option value="">Select a category</option>
+          <option>Announcement</option>
+          <option>Event</option>
+          <option>Achievement</option>
+          <option>Update</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Cover Image (optional)</label>
+        <div class="file-upload-zone" id="news-image-zone" onclick="document.getElementById('news-image-input').click()">
+          <div style="font-size:36px; margin-bottom:8px;">🖼️</div>
+          <input type="file" id="news-image-input" accept="image/*">
+          <div class="upload-text">Click to upload a cover image</div>
+        </div>
+        <img id="news-image-preview" style="width:100%;max-height:200px;object-fit:cover;border-radius:10px;margin-top:10px;display:none;" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Full Content *</label>
+        <textarea class="form-textarea" id="news-body" placeholder="Write the full news content..." maxlength="5000" style="min-height:200px;"></textarea>
+      </div>
+      <div id="news-submit-msg"></div>
+      <button class="form-submit" id="news-submit-btn" onclick="submitNews()" style="margin-top:8px;">Publish →</button>
+    </div>
+  </div>
+</div>
+
+<!-- CHALLENGES PAGE -->
+<div id="page-challenges" class="page z1">
+  <div class="container">
+    <div class="section">
+      <h2 class="section-title">Monthly Challenges</h2>
+      <p class="section-sub">Monthly innovation challenges open to all students. Submit your entry before the deadline.</p>
+      <div id="challenges-list"></div>
+    </div>
+  </div>
+</div>
+
+<!-- CHALLENGE SUBMISSIONS PAGE -->
+<div id="page-submissions" class="page z1">
+  <div class="container">
+    <div class="section">
+      <h2 class="section-title">Challenge Submissions</h2>
+      <p class="section-sub">All submissions across active challenges.</p>
+      <div id="submissions-list"></div>
     </div>
   </div>
 </div>
@@ -1814,8 +2167,10 @@ h1, h2, h3, h4, h5 { font-family: 'Poppins', sans-serif; font-weight: 700; }
       <div class="admin-nav-item active" onclick="adminSection('dashboard')">📊 Dashboard</div>
       <div class="admin-nav-item" onclick="adminSection('reports')">🚨 Reports</div>
       <div class="admin-nav-item" onclick="adminSection('approve')">✅ Approve Ideas</div>
+      <div class="admin-nav-item" onclick="adminSection('suggestions')">💬 Send Suggestions</div>
       <div class="admin-nav-item" id="admin-nav-news" style="display:none" onclick="adminSection('news')">📰 News</div>
       <div class="admin-nav-item" id="admin-nav-projects" style="display:none" onclick="adminSection('projects')">🚀 Projects</div>
+      <div class="admin-nav-item" id="admin-nav-challenges" style="display:none" onclick="adminSection('challenges')">🏆 Challenges</div>
       <div class="admin-nav-item" id="admin-nav-accounts" style="display:none" onclick="adminSection('accounts')">👥 Accounts</div>
       <div style="height: 1px; background: var(--border); margin: 12px 0;"></div>
       <div class="admin-nav-item" onclick="signOut()" style="color: var(--danger);">↩ Sign Out</div>
@@ -1856,6 +2211,13 @@ h1, h2, h3, h4, h5 { font-family: 'Poppins', sans-serif; font-weight: 700; }
         <h2 class="section-title">Approve Ideas</h2>
         <p class="section-sub">Review pending ideas and approve them for the platform.</p>
         <div id="pending-ideas-list"></div>
+      </div>
+
+      <!-- Suggestions -->
+      <div class="admin-section" id="admin-suggestions-section">
+        <h2 class="section-title">Send Suggestions</h2>
+        <p class="section-sub">Provide constructive feedback to idea creators.</p>
+        <div id="pending-creators-list"></div>
       </div>
 
       <!-- News Management -->
@@ -1900,7 +2262,74 @@ h1, h2, h3, h4, h5 { font-family: 'Poppins', sans-serif; font-weight: 700; }
           </table>
         </div>
       </div>
+
+      <!-- Challenges Management -->
+      <div class="admin-section" id="admin-challenges-section">
+        <div class="section-header-row" style="margin-bottom:8px;">
+          <div>
+            <h2 class="section-title">Monthly Challenges</h2>
+            <p class="section-sub">Create and manage monthly innovation challenges.</p>
+          </div>
+          <button class="btn btn-primary" onclick="openModal('add-challenge-modal')">+ New Challenge</button>
+        </div>
+        <div id="admin-challenges-list"></div>
+      </div>
     </div>
+  </div>
+</div>
+
+<!-- ADD CHALLENGE MODAL -->
+<div class="modal-overlay" id="add-challenge-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('add-challenge-modal')">✕</button>
+    <div class="modal-title">Create Challenge</div>
+    <div class="modal-sub">Set a monthly innovation challenge for students.</div>
+    <div class="form-group">
+      <label class="form-label">Title *</label>
+      <input type="text" class="form-input" id="challenge-title" placeholder="Challenge title" maxlength="100">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Category *</label>
+      <select class="form-select" id="challenge-category">
+        <option value="">Select a category</option>
+        <option>EdTech</option><option>Environment</option><option>Health</option>
+        <option>AI/ML</option><option>Community</option><option>Design</option><option>Other</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Description *</label>
+      <textarea class="form-textarea" id="challenge-desc" placeholder="Describe the challenge and what students should do..." maxlength="1000"></textarea>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Deadline (end of month) *</label>
+      <input type="date" class="form-input" id="challenge-deadline">
+    </div>
+    <div id="challenge-submit-msg"></div>
+    <button class="form-submit" id="challenge-submit-btn" onclick="submitChallenge()">Create Challenge →</button>
+  </div>
+</div>
+
+<!-- SUBMIT TO CHALLENGE MODAL -->
+<div class="modal-overlay" id="submit-challenge-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('submit-challenge-modal')">✕</button>
+    <div class="modal-title">Submit Entry</div>
+    <div class="modal-sub" id="submit-challenge-name"></div>
+    <div class="form-group">
+      <label class="form-label">Your Submission *</label>
+      <textarea class="form-textarea" id="sub-desc" placeholder="Describe your entry, approach, and solution..." maxlength="2000"></textarea>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Attach File (optional)</label>
+      <div class="file-upload-zone" onclick="document.getElementById('sub-file-input').click()">
+        <div style="font-size:24px;margin-bottom:6px;">📎</div>
+        <input type="file" id="sub-file-input">
+        <div class="upload-text">Any file type — PDF, ZIP, video link doc…</div>
+        <div class="file-chosen" id="sub-file-chosen" style="display:none"></div>
+      </div>
+    </div>
+    <div id="sub-challenge-msg"></div>
+    <button class="form-submit" id="sub-challenge-btn" onclick="submitChallengeEntry()">Submit Entry →</button>
   </div>
 </div>
 
@@ -1918,12 +2347,14 @@ try {
 
 // ─── STATE ──────────────────────────────────────────────────
 let currentUser = null;
-let currentAccount = null; // row from `accounts` table: { id, full_name, email, role, created_at }
+let currentAccount = null;
 let allIdeas = [];
 let allReports = [];
 let allAccounts = [];
 let allNews = [];
 let allProjects = [];
+let allChallenges = [];
+let allSubmissions = [];
 let currentFilter = '';
 let likedIdeas = new Set(JSON.parse(localStorage.getItem('innora_likes') || '[]'));
 
@@ -2007,9 +2438,25 @@ async function init() {
 
 window.addEventListener('DOMContentLoaded', init);
 
+function toggleMobileMenu() {
+  document.getElementById('mobile-menu').classList.toggle('open');
+}
+function closeMobileMenu() {
+  document.getElementById('mobile-menu').classList.remove('open');
+}
+function mobileNav(page) {
+  closeMobileMenu();
+  showPage(page);
+}
+
+function canPost() {
+  return isOperator() || isModerator();
+}
+
 // ─── PAGE ROUTING ───────────────────────────────────────────
 function showPage(id) {
   if (id === 'admin' && !isAdmin()) { showToast('Access denied', 'error'); return; }
+  if ((id === 'news-compose') && !canPost()) { showToast('Access denied', 'error'); return; }
   
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
@@ -2022,6 +2469,7 @@ function showPage(id) {
   const activeBtn = document.querySelector(`.nav-link[onclick*="'${id}'"]`);
   if (activeBtn) activeBtn.classList.add('active');
   
+  closeMobileMenu();
   window.scrollTo({ top: 0, behavior: 'smooth' });
   
   if (id === 'feed') renderFeed();
@@ -2029,6 +2477,8 @@ function showPage(id) {
   if (id === 'admin') loadAdminDashboard();
   if (id === 'news') loadNews();
   if (id === 'projects') loadProjects();
+  if (id === 'challenges') loadChallenges();
+  if (id === 'submissions') loadAllSubmissions();
 }
 
 // ─── AUTH FUNCTIONS ─────────────────────────────────────────
@@ -2114,13 +2564,12 @@ async function signUp() {
     // active session yet — that's fine, loadAccount() will pick this up on signIn.
     if (data.user) {
       try {
-        const { error: acctErr } = await sb.from('accounts').insert([{
+        await sb.from('accounts').insert([{
           id: data.user.id,
           full_name: fullName,
           email,
           role: 'member'
         }]);
-        if (acctErr) console.error('Could not create accounts row on signup:', acctErr);
       } catch (e) {
         console.warn('Could not pre-create accounts row', e);
       }
@@ -2150,6 +2599,9 @@ async function signOut() {
 function updateNavAuth() {
   const area = document.getElementById('nav-auth-area');
   const adminLink = document.getElementById('nav-admin-link');
+  const mobAdminLink = document.getElementById('mob-admin-link');
+  const submissionsLink = document.getElementById('nav-submissions-link');
+  const mobSubmissionsLink = document.getElementById('mob-submissions-link');
   
   if (currentUser) {
     const name = currentAccount?.full_name || currentUser.user_metadata?.full_name || currentUser.email?.split('@')[0] || 'User';
@@ -2170,23 +2622,33 @@ function updateNavAuth() {
       </button>
     `;
     
-    if (isAdmin()) {
-      adminLink.style.display = 'inline-flex';
-    } else {
-      adminLink.style.display = 'none';
-    }
+    document.getElementById('mobile-auth-area').innerHTML = `
+      <button class="nav-link" onclick="viewOwnProfile();closeMobileMenu();">👤 My Profile</button>
+      <button class="nav-link" onclick="handleLogout()" style="color:var(--danger);">↩ Sign Out</button>
+    `;
+    
+    const showAdmin = isAdmin();
+    adminLink.style.display = showAdmin ? 'inline-flex' : 'none';
+    if (mobAdminLink) mobAdminLink.style.display = showAdmin ? 'block' : 'none';
 
-    const canPost = isOperator() || isModerator();
+    // Submissions tab: show to all logged-in users
+    if (submissionsLink) submissionsLink.style.display = 'inline-flex';
+    if (mobSubmissionsLink) mobSubmissionsLink.style.display = 'block';
+
+    const cp = canPost();
     const addNewsBtn = document.getElementById('nav-add-news-btn');
     const addProjBtn = document.getElementById('nav-add-project-btn');
-    if (addNewsBtn) addNewsBtn.style.display = canPost ? 'inline-flex' : 'none';
-    if (addProjBtn) addProjBtn.style.display = canPost ? 'inline-flex' : 'none';
+    if (addNewsBtn) addNewsBtn.style.display = cp ? 'inline-flex' : 'none';
+    if (addProjBtn) addProjBtn.style.display = cp ? 'inline-flex' : 'none';
     
     document.getElementById('feed-composer').classList.remove('hidden');
-    // updateComposerAvatar();
   } else {
     area.innerHTML = `<button class="btn btn-primary" onclick="showPage('login')">Sign In</button>`;
+    document.getElementById('mobile-auth-area').innerHTML = `<button class="btn btn-primary" style="width:100%" onclick="mobileNav('login')">Sign In</button>`;
     adminLink.style.display = 'none';
+    if (mobAdminLink) mobAdminLink.style.display = 'none';
+    if (submissionsLink) submissionsLink.style.display = 'none';
+    if (mobSubmissionsLink) mobSubmissionsLink.style.display = 'none';
     const addNewsBtn = document.getElementById('nav-add-news-btn');
     const addProjBtn = document.getElementById('nav-add-project-btn');
     if (addNewsBtn) addNewsBtn.style.display = 'none';
@@ -2214,6 +2676,10 @@ function isModerator() {
   return getUserRole() === 'moderator';
 }
 
+function isInnovator() {
+  return getUserRole() === 'innovator';
+}
+
 // ─── IDEAS MANAGEMENT ───────────────────────────────────────
 async function loadIdeas() {
   try {
@@ -2229,25 +2695,9 @@ async function loadIdeas() {
     console.warn("Load ideas failed, using mock", e);
     allIdeas = mockIdeas;
   }
-
-  await stampSuggestionFlags();
+  
   updateStats();
   renderFeed();
-}
-
-// Marks each idea with `has_suggestion: true` if a row exists for it in the
-// `suggestions` table, so cards/badges can show "Suggestion Given" without
-// a separate round trip per idea.
-async function stampSuggestionFlags() {
-  if (!sb || !allIdeas.length) return;
-  try {
-    const { data, error } = await sb.from('suggestions').select('idea_id');
-    if (error) throw error;
-    const withSuggestion = new Set((data || []).map(s => s.idea_id));
-    allIdeas.forEach(idea => { idea.has_suggestion = withSuggestion.has(idea.id); });
-  } catch (e) {
-    console.warn('Could not load suggestion flags', e);
-  }
 }
 
 function updateStats() {
@@ -2258,6 +2708,115 @@ function updateStats() {
   setText('stat-ideas', total);
   setText('stat-users', users);
   setText('stat-likes', likes);
+}
+
+// ─── HOME PAGE SECTIONS ──────────────────────────────────────
+async function renderHomePageSections() {
+  renderHomeFeaturedProjects();
+  renderHomeNews();
+  renderHomeChallenge();
+}
+
+function renderHomeFeaturedProjects() {
+  const el = document.getElementById('home-projects');
+  if (!el) return;
+  const recent = [...allProjects].sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).slice(0, 3);
+  if (!recent.length) {
+    el.innerHTML = `<div class="empty-state" style="grid-column:1/-1;padding:40px 20px;"><div class="empty-icon">🚀</div><div class="empty-title">No projects yet</div></div>`;
+    return;
+  }
+  el.innerHTML = recent.map(p => `
+    <div class="home-project-card" onclick="showPage('projects')">
+      <span class="post-category" style="font-size:11px;padding:3px 9px;">${escHtml(p.category)}</span>
+      <div style="font-size:17px;font-weight:700;color:var(--text);margin:12px 0 8px;line-height:1.3;">${escHtml(p.name)}</div>
+      <div style="font-size:13px;color:var(--text-secondary);line-height:1.5;">${escHtml(truncate(p.description, 90))}</div>
+      <div style="font-size:12px;color:var(--text-tertiary);margin-top:12px;">🏷️ ${escHtml(p.team || 'INNORA Team')} · ${timeAgo(p.created_at)}</div>
+      ${p.file_url ? `<div style="font-size:12px;color:var(--primary-dark);margin-top:6px;">📎 File attached</div>` : ''}
+    </div>
+  `).join('');
+}
+
+function renderHomeNews() {
+  const el = document.getElementById('home-news');
+  if (!el) return;
+  const latest = allNews[0];
+  if (!latest) {
+    el.innerHTML = `<div class="empty-state" style="padding:40px 20px;"><div class="empty-icon">📰</div><div class="empty-title">No news yet</div></div>`;
+    return;
+  }
+  el.innerHTML = `
+    <div class="home-news-card" onclick="openNewsDetail('${latest.id}')">
+      ${latest.image_url
+        ? `<img class="home-news-img" src="${latest.image_url}" alt="news image" />`
+        : `<div class="home-news-img" style="display:flex;align-items:center;justify-content:center;font-size:48px;color:var(--border);">📰</div>`}
+      <div class="home-news-body">
+        <span class="post-category" style="font-size:11px;padding:3px 9px;">${escHtml(latest.category)}</span>
+        <div style="font-size:16px;font-weight:700;color:var(--text);margin:10px 0 6px;line-height:1.3;">${escHtml(latest.title)}</div>
+        <div style="font-size:13px;color:var(--text-secondary);line-height:1.5;">${escHtml(truncate(latest.content, 100))}</div>
+        <div style="font-size:12px;color:var(--text-tertiary);margin-top:10px;">${escHtml(latest.author_name || 'INNORA Team')} · ${timeAgo(latest.created_at)}</div>
+      </div>
+    </div>
+  `;
+}
+
+let homeCountdownTimer = null;
+
+async function renderHomeChallenge() {
+  const el = document.getElementById('home-challenge');
+  if (!el) return;
+
+  // Load challenges if not yet loaded
+  if (!allChallenges.length && sb) {
+    try {
+      const { data } = await sb.from('challenges').select('*').order('created_at', { ascending: false });
+      allChallenges = data || [];
+    } catch(e) {}
+  }
+
+  // Pick the active challenge closest to its deadline (but not expired)
+  const now = new Date();
+  const active = allChallenges
+    .filter(c => new Date(c.deadline) >= now)
+    .sort((a, b) => new Date(a.deadline) - new Date(b.deadline));
+  const c = active[0];
+
+  if (!c) {
+    el.innerHTML = `<div class="empty-state" style="padding:40px 20px;"><div class="empty-icon">🏆</div><div class="empty-title">No active challenge</div><div class="empty-text">Check back next month!</div></div>`;
+    return;
+  }
+
+  el.innerHTML = `
+    <div class="home-challenge-card">
+      <span class="post-category" style="font-size:11px;padding:3px 9px;">${escHtml(c.category)}</span>
+      <div style="font-size:18px;font-weight:700;color:var(--text);margin:12px 0 8px;">${escHtml(c.title)}</div>
+      <div style="font-size:13px;color:var(--text-secondary);line-height:1.5;margin-bottom:14px;">${escHtml(truncate(c.description, 120))}</div>
+      <div class="countdown-wrap" id="home-countdown"></div>
+      <button class="btn btn-primary" style="width:100%;margin-top:4px;" onclick="homeChallengeSubmit('${c.id}','${escHtml(c.title).replace(/'/g,"\\'")}')">Submit Entry →</button>
+    </div>
+  `;
+
+  // Start countdown
+  if (homeCountdownTimer) clearInterval(homeCountdownTimer);
+  function tick() {
+    const cdEl = document.getElementById('home-countdown');
+    if (!cdEl) { clearInterval(homeCountdownTimer); return; }
+    const diff = new Date(c.deadline + 'T23:59:59') - new Date();
+    if (diff <= 0) { cdEl.innerHTML = `<span style="color:var(--danger);font-weight:600;">Deadline passed</span>`; clearInterval(homeCountdownTimer); return; }
+    const d = Math.floor(diff / 86400000);
+    const h = Math.floor((diff % 86400000) / 3600000);
+    const m = Math.floor((diff % 3600000) / 60000);
+    const s = Math.floor((diff % 60000) / 1000);
+    cdEl.innerHTML = [
+      { n: d, l: 'Days' }, { n: h, l: 'Hours' }, { n: m, l: 'Mins' }, { n: s, l: 'Secs' }
+    ].map(x => `<div class="countdown-block"><div class="countdown-num">${String(x.n).padStart(2,'0')}</div><div class="countdown-label">${x.l}</div></div>`).join('');
+  }
+  tick();
+  homeCountdownTimer = setInterval(tick, 1000);
+}
+
+function homeChallengeSubmit(id, title) {
+  if (!currentUser) { showToast('Sign in to submit', 'error'); showPage('login'); return; }
+  openChallengeSubmit(id, title);
 }
 
 function setText(id, val) {
@@ -2422,7 +2981,6 @@ function postCardHTML(idea, opts = {}) {
       <div>
         <span class="post-category">${escHtml(idea.category)}</span>
         ${statusLabelHTML(idea)}
-        ${idea.has_suggestion && isOwn ? `<span class="post-status status-pending" style="cursor:pointer;" onclick="openDetail('${idea.id}')">💬 Suggestion Given</span>` : ''}
       </div>
       <div class="post-footer">
         <div class="post-action" onclick="likeIdea('${idea.id}')">
@@ -2810,47 +3368,45 @@ function timeAgo(dateStr) {
   return Math.floor(hr / 24) + 'd ago';
 }
 
-// ─── LEADERBOARD ────────────────────────────────────────────
+// ─── LEADERBOARD / INNOVATORS ────────────────────────────────
 async function renderLeaderboard() {
   const container = document.getElementById('leaderboard-content');
   if (!container) return;
 
-  container.innerHTML = '<div class="empty-state"><div class="empty-icon">⏳</div><div class="empty-title">Loading innovators...</div></div>';
+  container.innerHTML = '<div class="skeleton" style="height:120px;margin-bottom:16px;"></div><div class="skeleton" style="height:120px;"></div>';
 
-  let innovators = [];
   try {
+    let innovators = [];
     if (sb) {
-      const { data, error } = await sb.from('accounts').select('*').eq('role', 'innovator');
+      const { data, error } = await sb.from('accounts').select('*').eq('role', 'innovator').order('created_at', { ascending: true });
       if (error) throw error;
       innovators = data || [];
     }
+
+    if (!innovators.length) {
+      container.innerHTML = '<div class="empty-state"><div class="empty-icon">⭐</div><div class="empty-title">No Innovators yet</div><div class="empty-text">Innovators are students recognized by the INNORA team. Roles can be assigned in the Admin Panel.</div></div>';
+      return;
+    }
+
+    container.innerHTML = innovators.map((acc, idx) => {
+      const ideas = allIdeas.filter(i => i.creator_id === acc.id);
+      const likes = ideas.reduce((s, i) => s + (i.likes || 0), 0);
+      const initials = acc.full_name ? acc.full_name.split(' ').map(n => n[0]).join('').toUpperCase() : '?';
+      return `
+        <div class="stat-card" style="display:flex;flex-direction:column;align-items:center;gap:12px;cursor:pointer;" onclick="viewProfile('${acc.id}')">
+          <div class="post-avatar" style="width:64px;height:64px;font-size:24px;border-radius:14px;">${initials}</div>
+          <div>
+            <div style="font-size:18px;font-weight:700;color:var(--text);margin-bottom:4px;text-align:center;">${escHtml(acc.full_name || 'Unknown')}</div>
+            <div style="text-align:center;"><span class="role-badge role-innovator">⭐ Innovator</span></div>
+            <div style="font-size:13px;color:var(--text-secondary);margin-top:8px;text-align:center;">${ideas.length} ideas · ${likes} likes</div>
+          </div>
+          <button class="btn btn-secondary" style="width:100%;">View Profile</button>
+        </div>
+      `;
+    }).join('');
   } catch (e) {
-    console.warn('Load innovators failed', e);
-    container.innerHTML = '<div class="empty-state"><div class="empty-icon">⚠️</div><div class="empty-title">Could not load innovators</div></div>';
-    return;
+    container.innerHTML = '<div class="empty-state"><div class="empty-icon">⚠️</div><div class="empty-title">Failed to load</div></div>';
   }
-
-  if (!innovators.length) {
-    container.innerHTML = '<div class="empty-state"><div class="empty-icon">✨</div><div class="empty-title">No innovators yet</div><div class="empty-text">Innovators are highlighted here by the admin team.</div></div>';
-    return;
-  }
-
-  const stats = innovators.map(acc => {
-    const ideas = allIdeas.filter(i => i.creator_id === acc.id && i.status === 'approved');
-    const likes = ideas.reduce((s, i) => s + (i.likes || 0), 0);
-    return { id: acc.id, name: acc.full_name || 'Unnamed', ideas: ideas.length, likes };
-  }).sort((a, b) => b.likes - a.likes);
-
-  container.innerHTML = stats.map((innovator, idx) => `
-    <div class="stat-card">
-      <div style="font-size: 24px; font-weight: 700; color: var(--primary); margin-bottom: 12px;">#${idx + 1}</div>
-      <div style="font-size: 18px; font-weight: 700; margin-bottom: 8px; color: var(--text);">${escHtml(innovator.name)}</div>
-      <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 16px;">
-        ${innovator.ideas} ideas · ${innovator.likes} likes
-      </div>
-      <button class="btn btn-secondary" style="width: 100%;" onclick="viewProfile('${innovator.id}')">View Profile</button>
-    </div>
-  `).join('');
 }
 
 // ─── IDEA DETAIL ────────────────────────────────────────────
@@ -2881,7 +3437,6 @@ async function openDetail(id) {
     <h2 style="font-size: 22px; font-weight: 700; margin: 20px 0;">${escHtml(idea.title)}</h2>
     <p style="font-size: 15px; line-height: 1.6; color: var(--text-secondary); margin-bottom: 20px;">${escHtml(idea.description)}</p>
     ${idea.admin_feedback && idea.status === 'needs_revision' ? `<div class="form-error" style="margin-bottom: 20px;">📝 Admin feedback: ${escHtml(idea.admin_feedback)}</div>` : ''}
-    <div id="detail-suggestion-box"></div>
 
     <div style="display: flex; gap: 12px; padding-top: 20px; border-top: 1px solid var(--border); flex-wrap: wrap;">
       <button class="btn ${liked ? 'btn-primary' : 'btn-secondary'}" onclick="likeIdea('${id}')">
@@ -2889,81 +3444,28 @@ async function openDetail(id) {
       </button>
       <button class="btn btn-secondary">💬 0 Comments</button>
       ${currentUser && currentUser.id !== idea.creator_id ? `<button class="btn btn-secondary" onclick="reportIdea('${id}', event)">🚩 Report</button>` : ''}
+      ${isAdmin() ? `<button class="btn btn-danger" style="margin-left:auto;" onclick="suggestIdea('${id}')">💬 Send Suggestion</button>` : ''}
     </div>
   `;
 
   openModal('detail-modal');
-
-  // If this idea has a suggestion and the viewer is allowed to see it
-  // (the creator, or an admin), load and show it.
-  if (currentUser && (currentUser.id === idea.creator_id || isAdmin())) {
-    loadSuggestionForIdea(id);
-  }
 }
 
-async function loadSuggestionForIdea(ideaId) {
-  const box = document.getElementById('detail-suggestion-box');
-  if (!box || !sb) return;
-  try {
-    const { data, error } = await sb
-      .from('suggestions')
-      .select('*')
-      .eq('idea_id', ideaId)
-      .order('created_at', { ascending: false })
-      .limit(1)
-      .maybeSingle();
-    if (error) throw error;
-    if (data) {
-      box.innerHTML = `<div class="form-success" style="margin-bottom: 20px;">💬 Suggestion: ${escHtml(data.message)}</div>`;
-    }
-  } catch (e) {
-    console.warn('Could not load suggestion', e);
-  }
-}
-
-// Suggestions are only sent from the Approve Ideas admin page now, scoped
-// to one pending idea — not as a generic "message any creator" tool.
 function suggestIdea(id) {
   window.currentSuggestionId = id;
-  document.getElementById('suggestion-msg').innerHTML = '';
-  document.getElementById('suggestion-input').value = '';
   openModal('suggestion-modal');
 }
 
 async function sendSuggestion() {
   const id = window.currentSuggestionId;
-  const message = document.getElementById('suggestion-input').value.trim();
+  const suggestion = document.getElementById('suggestion-input').value.trim();
   const msg = document.getElementById('suggestion-msg');
 
-  if (!message) { msg.innerHTML = '<div class="form-error">Write a suggestion</div>'; return; }
+  if (!suggestion) { msg.innerHTML = '<div class="form-error">Write a suggestion</div>'; return; }
 
-  const idea = allIdeas.find(i => i.id === id);
-  if (!idea) { closeModal('suggestion-modal'); return; }
-
-  const payload = {
-    idea_id: id,
-    creator_id: idea.creator_id,
-    message,
-    created_by: currentUser.id
-  };
-
-  try {
-    if (sb) {
-      // One suggestion per idea — replace any existing one for this idea.
-      await sb.from('suggestions').delete().eq('idea_id', id);
-      const { data, error } = await sb.from('suggestions').insert([payload]).select();
-      if (error) throw error;
-      if (!data || !data.length) throw new Error('Suggestion was not saved (0 rows affected).');
-    }
-    idea.has_suggestion = true;
-
-    msg.innerHTML = '<div class="form-success">Suggestion sent! 📬</div>';
-    document.getElementById('suggestion-input').value = '';
-    renderPendingIdeas();
-    setTimeout(() => closeModal('suggestion-modal'), 1200);
-  } catch (e) {
-    msg.innerHTML = `<div class="form-error">${e.message}</div>`;
-  }
+  msg.innerHTML = '<div class="form-success">Suggestion sent! 📬</div>';
+  document.getElementById('suggestion-input').value = '';
+  setTimeout(() => closeModal('suggestion-modal'), 1500);
 }
 
 // ─── ADMIN PANEL ────────────────────────────────────────────
@@ -2975,8 +3477,10 @@ function adminSection(section) {
     dashboard: 'admin-dashboard',
     reports: 'admin-reports-section',
     approve: 'admin-approve-section',
+    suggestions: 'admin-suggestions-section',
     news: 'admin-news-section',
     projects: 'admin-projects-section',
+    challenges: 'admin-challenges-section',
     accounts: 'admin-accounts-section'
   };
 
@@ -2986,24 +3490,14 @@ function adminSection(section) {
   const navEl = document.querySelector(`[onclick="adminSection('${section}')"]`);
   if (navEl) navEl.classList.add('active');
 
-  // Lazy-load section data the first time it's opened.
   if (section === 'news') renderAdminNews();
   if (section === 'projects') renderAdminProjects();
   if (section === 'accounts') loadAccountsList();
+  if (section === 'challenges') renderAdminChallenges();
 }
 
 async function loadAdminDashboard() {
-  // Pull fresh ideas/reports/suggestions from Supabase every time the admin panel opens.
-  if (sb) {
-    try {
-      const { data, error } = await sb.from('ideas').select('*').order('created_at', { ascending: false });
-      if (error) throw error;
-      allIdeas = data || [];
-      await stampSuggestionFlags();
-    } catch (e) {
-      console.warn('Refreshing ideas for admin panel failed', e);
-    }
-  }
+  // Pull fresh reports from Supabase every time the admin panel opens.
   await loadReports();
 
   const total = allIdeas.length;
@@ -3016,12 +3510,13 @@ async function loadAdminDashboard() {
 
   renderReports();
   renderPendingIdeas();
+  renderPendingCreators();
 
-  // Show/hide role-gated admin sidebar items
-  const canPost = isOperator() || isModerator();
+  const cp = canPost();
   const setNav = (id, show) => { const el = document.getElementById(id); if (el) el.style.display = show ? 'block' : 'none'; };
-  setNav('admin-nav-news', canPost);
-  setNav('admin-nav-projects', canPost);
+  setNav('admin-nav-news', cp);
+  setNav('admin-nav-projects', cp);
+  setNav('admin-nav-challenges', cp);
   setNav('admin-nav-accounts', isOperator());
 }
 
@@ -3111,11 +3606,9 @@ function renderPendingIdeas() {
       <div class="post-name">${escHtml(idea.creator_name)}</div>
       <div style="font-size: 13px; color: var(--text-tertiary); margin-bottom: 8px;">${escHtml(idea.category)} • ${timeAgo(idea.created_at)}</div>
       <div class="post-body" style="margin: 12px 0; cursor: default;"><strong>${escHtml(idea.title)}</strong><br>${escHtml(idea.description)}</div>
-      ${idea.has_suggestion ? `<span class="post-status status-pending">💬 Suggestion Given</span>` : ''}
       <div class="post-footer">
         <button class="btn btn-primary" onclick="approveIdea('${idea.id}')">✅ Approve</button>
         <button class="btn btn-secondary" onclick="openFeedbackPrompt('${idea.id}')">📝 Request Changes</button>
-        <button class="btn btn-secondary" onclick="suggestIdea('${idea.id}')">💬 ${idea.has_suggestion ? 'Edit Suggestion' : 'Send Suggestion'}</button>
         <button class="btn btn-danger" onclick="removeIdea('${idea.id}')">🗑️ Reject</button>
       </div>
     </div>
@@ -3138,13 +3631,8 @@ async function sendFeedback() {
 
   try {
     if (sb) {
-      const { data, error } = await sb
-        .from('ideas')
-        .update({ status: 'needs_revision', admin_feedback: feedback })
-        .eq('id', id)
-        .select();
+      const { error } = await sb.from('ideas').update({ status: 'needs_revision', admin_feedback: feedback }).eq('id', id);
       if (error) throw error;
-      if (!data || !data.length) throw new Error('No matching idea was updated (0 rows affected).');
     }
     const idea = allIdeas.find(i => i.id === id);
     if (idea) { idea.status = 'needs_revision'; idea.admin_feedback = feedback; }
@@ -3159,38 +3647,50 @@ async function sendFeedback() {
   }
 }
 
+function renderPendingCreators() {
+  const container = document.getElementById('pending-creators-list');
+  if (!container) return;
+
+  const creators = [...new Set(allIdeas.map(i => i.creator_id))].map(id => {
+    const ideas = allIdeas.filter(i => i.creator_id === id);
+    return { id, name: ideas[0].creator_name, ideas: ideas.length };
+  });
+
+  if (!creators.length) {
+    container.innerHTML = '<div class="empty-state"><div class="empty-icon">✨</div><div class="empty-title">No creators</div></div>';
+    return;
+  }
+
+  container.innerHTML = creators.map(creator => `
+    <div class="post-card">
+      <div class="post-name">${escHtml(creator.name)}</div>
+      <div style="font-size: 13px; color: var(--text-secondary); margin: 8px 0;">${creator.ideas} ideas</div>
+      <button class="btn btn-primary" onclick="suggestToCreator('${creator.id}')">💬 Send Suggestion</button>
+    </div>
+  `).join('');
+}
+
+function suggestToCreator(creatorId) {
+  window.currentSuggestionCreator = creatorId;
+  openModal('suggestion-modal');
+}
+
 async function approveIdea(id) {
   const idea = allIdeas.find(i => i.id === id);
   if (!idea) return;
-
-  try {
-    if (sb) {
-      const { data, error } = await sb
-        .from('ideas')
-        .update({ status: 'approved', admin_feedback: null })
-        .eq('id', id)
-        .select();
-
-      if (error) throw error;
-      if (!data || !data.length) {
-        // The update ran with no error but matched zero rows — this is the
-        // silent-failure case (RLS, wrong id, etc). Surface it instead of
-        // pretending it worked.
-        throw new Error('No matching idea was updated in Supabase (0 rows affected). Check the id and table permissions.');
-      }
-    }
-
-    idea.status = 'approved';
-    idea.admin_feedback = null;
-
-    setText('admin-approved', allIdeas.filter(i => i.status === 'approved').length);
-    renderPendingIdeas();
-    renderFeed();
-    showToast('Idea approved!', 'success');
-  } catch (e) {
-    console.error('approveIdea failed', e);
-    showToast('Approve failed: ' + e.message, 'error');
+  idea.status = 'approved';
+  idea.admin_feedback = null;
+  
+  if (sb) {
+    await sb.from('ideas').update({ status: 'approved', admin_feedback: null }).eq('id', id);
+  } else {
+    localStorage.setItem('innora_ideas', JSON.stringify(allIdeas));
   }
+  
+  setText('admin-approved', allIdeas.filter(i => i.status === 'approved').length);
+  renderPendingIdeas();
+  renderFeed();
+  showToast('Idea approved!', 'success');
 }
 
 // ─── NEWS ───────────────────────────────────────────────────
@@ -3217,27 +3717,67 @@ function renderNewsFeed() {
     return;
   }
 
-  container.innerHTML = allNews.map(n => `
-    <div class="post-card">
-      <div class="post-header">
-        <div class="post-meta">
-          <div class="post-name">${escHtml(n.title)}</div>
-          <div style="font-size: 13px; color: var(--text-tertiary);">${escHtml(n.author_name || 'INNORA Team')} • ${timeAgo(n.created_at)}</div>
+  container.innerHTML = allNews.map(n => {
+    const thumbHtml = n.image_url
+      ? `<div class="news-list-thumb"><img src="${n.image_url}" /></div>`
+      : `<div class="news-list-thumb">📰</div>`;
+    const excerpt = n.content.length > 100 ? n.content.substring(0, 100) + '…' : n.content;
+    return `
+      <div class="news-list-item" onclick="openNewsDetail('${n.id}')">
+        ${thumbHtml}
+        <div class="news-list-info">
+          <div class="news-list-title">${escHtml(n.title)}</div>
+          <div class="news-list-meta"><span class="post-category" style="font-size:11px;padding:3px 8px;">${escHtml(n.category)}</span> &nbsp;${escHtml(n.author_name || 'INNORA Team')} · ${timeAgo(n.created_at)}</div>
+          <div class="news-list-excerpt">${escHtml(excerpt)}</div>
         </div>
+        ${canPost() ? `<button class="btn btn-danger" style="flex-shrink:0;padding:6px 10px;font-size:12px;" onclick="deleteNews('${n.id}',event)">🗑️</button>` : ''}
       </div>
-      <div>
-        <span class="post-category">${escHtml(n.category)}</span>
-      </div>
-      <div class="post-body" style="cursor:default; margin-top: 10px;">${escHtml(n.content)}</div>
-      ${isOperator() ? `<div class="post-footer"><button class="btn btn-danger" onclick="deleteNews('${n.id}')">🗑️ Delete</button></div>` : ''}
-    </div>
-  `).join('');
+    `;
+  }).join('');
 }
+
+function openNewsDetail(id) {
+  const n = allNews.find(x => x.id === id);
+  if (!n) return;
+  const overlay = document.getElementById('news-detail-overlay');
+  document.getElementById('news-detail-content').innerHTML = `
+    ${n.image_url ? `<img class="news-detail-img" src="${n.image_url}" />` : ''}
+    <div class="news-detail-body">
+      <span class="post-category">${escHtml(n.category)}</span>
+      <h2 style="font-size:24px;font-weight:800;margin:16px 0 8px;color:var(--text);">${escHtml(n.title)}</h2>
+      <div style="font-size:13px;color:var(--text-tertiary);margin-bottom:20px;">${escHtml(n.author_name || 'INNORA Team')} · ${timeAgo(n.created_at)}</div>
+      <p style="font-size:15px;line-height:1.8;color:var(--text-secondary);">${escHtml(n.content).replace(/\n/g,'<br>')}</p>
+    </div>
+  `;
+  overlay.classList.add('open');
+}
+
+function closeNewsDetail() {
+  document.getElementById('news-detail-overlay').classList.remove('open');
+}
+
+document.getElementById('news-detail-overlay')?.addEventListener('click', function(e) {
+  if (e.target === this) closeNewsDetail();
+});
+
+// News image preview
+document.getElementById('news-image-input')?.addEventListener('change', function(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const prev = document.getElementById('news-image-preview');
+    prev.src = ev.target.result;
+    prev.style.display = 'block';
+  };
+  reader.readAsDataURL(file);
+});
 
 async function submitNews() {
   const title = document.getElementById('news-title').value.trim();
   const category = document.getElementById('news-category').value;
   const content = document.getElementById('news-body').value.trim();
+  const imgInput = document.getElementById('news-image-input');
   const msg = document.getElementById('news-submit-msg');
   const btn = document.getElementById('news-submit-btn');
 
@@ -3249,27 +3789,36 @@ async function submitNews() {
   btn.disabled = true;
   btn.textContent = 'Publishing...';
 
-  const payload = {
-    title,
-    category,
-    content,
-    author_id: currentUser.id,
-    author_name: currentAccount?.full_name || currentUser.user_metadata?.full_name || 'INNORA Team'
-  };
-
+  let imageUrl = null;
   try {
+    if (sb && imgInput.files.length > 0) {
+      const file = imgInput.files[0];
+      const fileName = `${Date.now()}-${file.name.replace(/\s+/g,'-')}`;
+      const { data, error } = await sb.storage.from('news-images').upload(fileName, file);
+      if (error) throw error;
+      const { data: { publicUrl } } = sb.storage.from('news-images').getPublicUrl(fileName);
+      imageUrl = publicUrl;
+    }
+
+    const payload = {
+      title, category, content,
+      author_id: currentUser.id,
+      author_name: currentAccount?.full_name || currentUser.user_metadata?.full_name || 'INNORA Team',
+      image_url: imageUrl
+    };
+
     if (sb) {
       const { data, error } = await sb.from('news').insert([payload]).select().single();
       if (error) throw error;
       allNews.unshift(data);
     }
-    closeModal('add-news-modal');
     document.getElementById('news-title').value = '';
     document.getElementById('news-category').value = '';
     document.getElementById('news-body').value = '';
-    renderNewsFeed();
-    renderAdminNews();
+    document.getElementById('news-image-input').value = '';
+    document.getElementById('news-image-preview').style.display = 'none';
     showToast('News published! 📰', 'success');
+    showPage('news');
   } catch (e) {
     msg.innerHTML = `<div class="form-error">${e.message}</div>`;
   } finally {
@@ -3296,7 +3845,8 @@ function renderAdminNews() {
   `).join('');
 }
 
-async function deleteNews(id) {
+async function deleteNews(id, evt) {
+  evt?.stopPropagation();
   if (!confirm('Delete this news post?')) return;
   try {
     if (sb) {
@@ -3346,16 +3896,31 @@ function renderProjectsFeed() {
       </div>
       <div><span class="post-category">${escHtml(p.category)}</span></div>
       <div class="post-body" style="cursor:default; margin-top: 10px;">${escHtml(p.description)}</div>
-      ${isOperator() ? `<div class="post-footer"><button class="btn btn-danger" onclick="deleteProject('${p.id}')">🗑️ Delete</button></div>` : ''}
+      ${p.file_url ? `<a href="${p.file_url}" target="_blank" class="btn btn-secondary" style="margin-top:10px;display:inline-flex;">📎 ${escHtml(p.file_name || 'Download File')}</a>` : ''}
+      ${canPost() ? `<div class="post-footer"><button class="btn btn-danger" onclick="deleteProject('${p.id}')">🗑️ Delete</button></div>` : ''}
     </div>
   `).join('');
 }
+
+// File input display handler
+document.getElementById('project-file-input')?.addEventListener('change', function(e) {
+  const file = e.target.files[0];
+  const el = document.getElementById('project-file-chosen');
+  if (file && el) { el.textContent = '📎 ' + file.name; el.style.display = 'block'; }
+});
+
+document.getElementById('sub-file-input')?.addEventListener('change', function(e) {
+  const file = e.target.files[0];
+  const el = document.getElementById('sub-file-chosen');
+  if (file && el) { el.textContent = '📎 ' + file.name; el.style.display = 'block'; }
+});
 
 async function submitProject() {
   const name = document.getElementById('project-name').value.trim();
   const category = document.getElementById('project-category').value;
   const description = document.getElementById('project-desc').value.trim();
   const team = document.getElementById('project-team').value.trim();
+  const fileInput = document.getElementById('project-file-input');
   const msg = document.getElementById('project-submit-msg');
   const btn = document.getElementById('project-submit-btn');
 
@@ -3367,15 +3932,26 @@ async function submitProject() {
   btn.disabled = true;
   btn.textContent = 'Creating...';
 
-  const payload = {
-    name,
-    category,
-    description,
-    team: team || null,
-    created_by: currentUser.id
-  };
-
+  let fileUrl = null, fileName = null;
   try {
+    if (sb && fileInput.files.length > 0) {
+      const file = fileInput.files[0];
+      fileName = file.name;
+      const storageName = `${Date.now()}-${fileName.replace(/\s+/g, '-')}`;
+      const { data, error } = await sb.storage.from('project-files').upload(storageName, file);
+      if (error) throw error;
+      const { data: { publicUrl } } = sb.storage.from('project-files').getPublicUrl(storageName);
+      fileUrl = publicUrl;
+    }
+
+    const payload = {
+      name, category, description,
+      team: team || null,
+      created_by: currentUser.id,
+      file_url: fileUrl,
+      file_name: fileName
+    };
+
     if (sb) {
       const { data, error } = await sb.from('projects').insert([payload]).select().single();
       if (error) throw error;
@@ -3386,6 +3962,9 @@ async function submitProject() {
     document.getElementById('project-category').value = '';
     document.getElementById('project-desc').value = '';
     document.getElementById('project-team').value = '';
+    fileInput.value = '';
+    const fc = document.getElementById('project-file-chosen');
+    if (fc) { fc.textContent = ''; fc.style.display = 'none'; }
     renderProjectsFeed();
     renderAdminProjects();
     showToast('Project added! 🚀', 'success');
@@ -3457,7 +4036,7 @@ function renderAccountsList() {
     return;
   }
 
-  const roles = ['member', 'moderator', 'operator', 'admin'];
+  const roles = ['member', 'innovator', 'moderator', 'operator', 'admin'];
 
   tbody.innerHTML = allAccounts.map(acc => `
     <tr>
@@ -3473,6 +4052,273 @@ function renderAccountsList() {
   `).join('');
 }
 
+// ─── CHALLENGES ──────────────────────────────────────────────
+async function loadChallenges() {
+  try {
+    if (sb) {
+      const { data, error } = await sb.from('challenges').select('*').order('created_at', { ascending: false });
+      if (error) throw error;
+      allChallenges = data || [];
+    }
+  } catch (e) {
+    console.warn('Load challenges failed', e);
+    allChallenges = [];
+  }
+  renderChallenges();
+}
+
+function deadlineLabel(deadline) {
+  const d = new Date(deadline);
+  const now = new Date();
+  const diff = d - now;
+  const days = Math.ceil(diff / 86400000);
+  if (days < 0) return { cls: '', text: 'Deadline passed' };
+  if (days <= 7) return { cls: 'soon', text: `⏰ ${days} days left` };
+  return { cls: 'active', text: `✅ Deadline: ${d.toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' })}` };
+}
+
+function renderChallenges() {
+  const container = document.getElementById('challenges-list');
+  if (!container) return;
+
+  if (!allChallenges.length) {
+    container.innerHTML = '<div class="empty-state"><div class="empty-icon">🏆</div><div class="empty-title">No challenges yet</div><div class="empty-text">Monthly challenges will appear here. Check back soon!</div></div>';
+    return;
+  }
+
+  container.innerHTML = allChallenges.map(c => {
+    const dl = deadlineLabel(c.deadline);
+    return `
+      <div class="challenge-card">
+        <div>
+          <span class="challenge-deadline ${dl.cls}">${dl.text}</span>
+          <span class="post-category" style="margin-left:8px;">${escHtml(c.category)}</span>
+        </div>
+        <h3 style="font-size:20px;font-weight:700;margin:10px 0 8px;color:var(--text);">${escHtml(c.title)}</h3>
+        <p style="font-size:14px;color:var(--text-secondary);line-height:1.6;margin-bottom:16px;">${escHtml(c.description)}</p>
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+          ${currentUser && new Date(c.deadline) > new Date() ? `<button class="btn btn-primary" onclick="openChallengeSubmit('${c.id}','${escHtml(c.title).replace(/'/g,"\\'")}')">Submit Entry →</button>` : ''}
+          <button class="btn btn-secondary" onclick="showPage('submissions');filterSubmissions('${c.id}')">View Submissions</button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function openChallengeSubmit(challengeId, challengeTitle) {
+  if (!currentUser) { showToast('Sign in to submit', 'error'); showPage('login'); return; }
+  window.currentChallengeId = challengeId;
+  document.getElementById('submit-challenge-name').textContent = `Challenge: ${challengeTitle}`;
+  document.getElementById('sub-desc').value = '';
+  document.getElementById('sub-challenge-msg').innerHTML = '';
+  document.getElementById('sub-file-input').value = '';
+  const fc = document.getElementById('sub-file-chosen');
+  if (fc) { fc.textContent = ''; fc.style.display = 'none'; }
+  openModal('submit-challenge-modal');
+}
+
+async function submitChallengeEntry() {
+  const desc = document.getElementById('sub-desc').value.trim();
+  const fileInput = document.getElementById('sub-file-input');
+  const msg = document.getElementById('sub-challenge-msg');
+  const btn = document.getElementById('sub-challenge-btn');
+  const challengeId = window.currentChallengeId;
+
+  msg.innerHTML = '';
+  if (!desc) { msg.innerHTML = '<div class="form-error">Please describe your submission</div>'; return; }
+
+  btn.disabled = true;
+  btn.textContent = 'Submitting...';
+
+  let fileUrl = null, fileName = null;
+  try {
+    if (sb && fileInput.files.length > 0) {
+      const file = fileInput.files[0];
+      fileName = file.name;
+      const storageName = `${challengeId}-${currentUser.id}-${Date.now()}-${fileName.replace(/\s+/g,'-')}`;
+      const { data, error } = await sb.storage.from('challenge-files').upload(storageName, file);
+      if (error) throw error;
+      const { data: { publicUrl } } = sb.storage.from('challenge-files').getPublicUrl(storageName);
+      fileUrl = publicUrl;
+    }
+
+    const payload = {
+      challenge_id: challengeId,
+      submitter_id: currentUser.id,
+      submitter_name: currentAccount?.full_name || currentUser.user_metadata?.full_name || 'Anonymous',
+      description: desc,
+      file_url: fileUrl,
+      file_name: fileName
+    };
+
+    if (sb) {
+      const { data, error } = await sb.from('challenge_submissions').insert([payload]).select().single();
+      if (error) throw error;
+      allSubmissions.push(data);
+    }
+    closeModal('submit-challenge-modal');
+    showToast('Entry submitted! 🎉', 'success');
+  } catch (e) {
+    msg.innerHTML = `<div class="form-error">${e.message}</div>`;
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Submit Entry →';
+  }
+}
+
+// ─── CHALLENGE SUBMISSIONS TAB ───────────────────────────────
+let activeSubmissionFilter = null;
+
+async function loadAllSubmissions() {
+  try {
+    if (sb) {
+      const { data, error } = await sb.from('challenge_submissions').select('*, challenges(title)').order('created_at', { ascending: false });
+      if (error) throw error;
+      allSubmissions = data || [];
+    }
+  } catch (e) {
+    console.warn('Load submissions failed', e);
+    allSubmissions = [];
+  }
+  renderSubmissions();
+}
+
+function filterSubmissions(challengeId) {
+  activeSubmissionFilter = challengeId;
+  renderSubmissions();
+}
+
+function renderSubmissions() {
+  const container = document.getElementById('submissions-list');
+  if (!container) return;
+
+  const list = activeSubmissionFilter
+    ? allSubmissions.filter(s => s.challenge_id === activeSubmissionFilter)
+    : allSubmissions;
+
+  const filterBanner = activeSubmissionFilter
+    ? `<div style="margin-bottom:16px;display:flex;align-items:center;gap:12px;">
+        <span style="font-size:14px;color:var(--text-secondary);">Filtered by challenge</span>
+        <button class="btn btn-secondary" style="padding:6px 12px;font-size:13px;" onclick="activeSubmissionFilter=null;renderSubmissions()">Show All</button>
+       </div>`
+    : '';
+
+  if (!list.length) {
+    container.innerHTML = filterBanner + '<div class="empty-state"><div class="empty-icon">📋</div><div class="empty-title">No submissions yet</div><div class="empty-text">Submit your entry in the Challenges tab.</div></div>';
+    return;
+  }
+
+  container.innerHTML = filterBanner + list.map(s => `
+    <div class="post-card">
+      <div class="post-header">
+        <div class="post-meta">
+          <div class="post-name">${escHtml(s.submitter_name)}</div>
+          <div style="font-size:13px;color:var(--text-tertiary);">${escHtml(s.challenges?.title || 'Challenge')} · ${timeAgo(s.created_at)}</div>
+        </div>
+        ${(isAdmin() || currentUser?.id === s.submitter_id) ? `<button class="btn btn-danger" style="margin-left:auto;padding:6px 10px;font-size:12px;" onclick="deleteSubmission('${s.id}')">🗑️</button>` : ''}
+      </div>
+      <div class="post-body" style="cursor:default;">${escHtml(s.description)}</div>
+      ${s.file_url ? `<a href="${s.file_url}" target="_blank" class="btn btn-secondary" style="margin-top:8px;display:inline-flex;">📎 ${escHtml(s.file_name || 'Download')}</a>` : ''}
+    </div>
+  `).join('');
+}
+
+async function deleteSubmission(id) {
+  if (!confirm('Delete this submission?')) return;
+  try {
+    if (sb) {
+      const { error } = await sb.from('challenge_submissions').delete().eq('id', id);
+      if (error) throw error;
+    }
+    allSubmissions = allSubmissions.filter(s => s.id !== id);
+    renderSubmissions();
+    showToast('Submission deleted', 'success');
+  } catch (e) {
+    showToast('Failed: ' + e.message, 'error');
+  }
+}
+
+// ─── ADMIN: CREATE CHALLENGE ─────────────────────────────────
+async function submitChallenge() {
+  const title = document.getElementById('challenge-title').value.trim();
+  const category = document.getElementById('challenge-category').value;
+  const desc = document.getElementById('challenge-desc').value.trim();
+  const deadline = document.getElementById('challenge-deadline').value;
+  const msg = document.getElementById('challenge-submit-msg');
+  const btn = document.getElementById('challenge-submit-btn');
+
+  msg.innerHTML = '';
+  if (!title) { msg.innerHTML = '<div class="form-error">Title required</div>'; return; }
+  if (!category) { msg.innerHTML = '<div class="form-error">Category required</div>'; return; }
+  if (!desc) { msg.innerHTML = '<div class="form-error">Description required</div>'; return; }
+  if (!deadline) { msg.innerHTML = '<div class="form-error">Deadline required</div>'; return; }
+
+  btn.disabled = true;
+  btn.textContent = 'Creating...';
+
+  const payload = {
+    title, category, description: desc, deadline,
+    created_by: currentUser.id
+  };
+
+  try {
+    if (sb) {
+      const { data, error } = await sb.from('challenges').insert([payload]).select().single();
+      if (error) throw error;
+      allChallenges.unshift(data);
+    }
+    closeModal('add-challenge-modal');
+    document.getElementById('challenge-title').value = '';
+    document.getElementById('challenge-category').value = '';
+    document.getElementById('challenge-desc').value = '';
+    document.getElementById('challenge-deadline').value = '';
+    renderAdminChallenges();
+    showToast('Challenge created! 🏆', 'success');
+  } catch (e) {
+    msg.innerHTML = `<div class="form-error">${e.message}</div>`;
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Create Challenge →';
+  }
+}
+
+function renderAdminChallenges() {
+  const container = document.getElementById('admin-challenges-list');
+  if (!container) return;
+  if (!allChallenges.length) {
+    container.innerHTML = '<div class="empty-state"><div class="empty-icon">🏆</div><div class="empty-title">No challenges yet</div></div>';
+    return;
+  }
+  container.innerHTML = allChallenges.map(c => {
+    const dl = deadlineLabel(c.deadline);
+    return `
+      <div class="post-card">
+        <div class="post-name">${escHtml(c.title)}</div>
+        <div style="font-size:13px;color:var(--text-tertiary);margin:6px 0;">${escHtml(c.category)} · <span class="challenge-deadline ${dl.cls}" style="font-size:11px;">${dl.text}</span></div>
+        <div class="post-footer">
+          <button class="btn btn-danger" onclick="deleteChallenge('${c.id}')">🗑️ Delete</button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+async function deleteChallenge(id) {
+  if (!confirm('Delete this challenge? All submissions will also be deleted.')) return;
+  try {
+    if (sb) {
+      const { error } = await sb.from('challenges').delete().eq('id', id);
+      if (error) throw error;
+    }
+    allChallenges = allChallenges.filter(c => c.id !== id);
+    renderAdminChallenges();
+    showToast('Challenge deleted', 'success');
+  } catch (e) {
+    showToast('Failed: ' + e.message, 'error');
+  }
+}
+
+// ─── ACCOUNTS MANAGEMENT (operator only) ─────────────────────
 async function changeAccountRole(accountId, newRole) {
   if (!isOperator()) { showToast('Only operators can change roles', 'error'); return; }
   if (accountId === currentUser.id && newRole !== 'operator' && newRole !== 'admin') {
@@ -3484,13 +4330,8 @@ async function changeAccountRole(accountId, newRole) {
 
   try {
     if (sb) {
-      const { data, error } = await sb
-        .from('accounts')
-        .update({ role: newRole })
-        .eq('id', accountId)
-        .select();
+      const { error } = await sb.from('accounts').update({ role: newRole }).eq('id', accountId);
       if (error) throw error;
-      if (!data || !data.length) throw new Error('No matching account was updated (0 rows affected).');
     }
     const acc = allAccounts.find(a => a.id === accountId);
     if (acc) acc.role = newRole;
